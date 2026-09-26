@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0b0d11">
+  <meta name="description" content="Sistema Operacional Gastronômico da Festa de 18 Anos da Bia - Pizzaria Artesanal">
+  <title>Pizzaria da Bia — 18 Anos 🍕</title>
+  
+  <!-- Favicon Emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍕</text></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0b0d12;
+      --bg-surface: #121622;
+      --bg-surface-elevated: #181f30;
+      --bg-surface-active: #202a42;
+      --border-subtle: #242d45;
+      --border-focus: #f59e0b;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --amber: #f59e0b;
+      --amber-light: #fbbf24;
+      --amber-glow: rgba(245, 158, 11, 0.25);
+      
+      --red: #ef4444;
+      --red-glow: rgba(239, 68, 68, 0.3);
+      
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.25);
+      
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 25px var(--amber-glow);
+      
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding-bottom: 90px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: var(--radius-full);
+    }
+
+    /* Top App Bar */
+    header.app-header {
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 18px;
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #ef4444, #f59e0b);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+    }
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .brand-title span {
+      color: var(--amber);
+    }
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .kpi-mini-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+    }
+    .kpi-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .kpi-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .kpi-dot.done { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+    .kpi-dot.oven { background: var(--amber); box-shadow: 0 0 8px var(--amber-glow); }
+    .kpi-dot.todo { background: var(--text-dim); }
+
+    /* Main Container */
+    main.main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px 18px;
+      flex: 1;
+    }
+
+    /* Tab Panes */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bottom Navigation Bar */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(14, 18, 28, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 6px 12px;
+      z-index: 999;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+    }
+    .nav-btn {
+      flex: 1;
+      max-width: 100px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 4px;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+    .nav-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2;
+      transition: transform var(--transition-fast);
+    }
+    .nav-btn:hover {
+      color: var(--text-main);
+    }
+    .nav-btn.active {
+      color: var(--amber);
+    }
+    .nav-btn.active svg {
+      transform: translateY(-2px);
+    }
+    .nav-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      width: 16px;
+      height: 3px;
+      background: var(--amber);
+      border-radius: var(--radius-full);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: 4px;
+      right: 22px;
+      background: var(--red);
+      color: white;
+      font-size: 0.65rem;
+      padding: 1px 5px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+    }
+
+    /* Section Headers */
+    .section-title-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Filter Pills */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-pill {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+    .filter-pill:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+    }
+    .filter-pill.active {
+      background: var(--amber);
+      color: #0b0d11;
+      border-color: var(--amber);
+      box-shadow: 0 0 12px var(--amber-glow);
+    }
+
+    /* Cards Grid */
+    .pizza-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    /* Pizza KDS Card */
+    .pizza-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+      position: relative;
+    }
+    .pizza-card:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .pizza-card.status-oven {
+      border-color: var(--amber);
+      box-shadow: 0 0 18px var(--amber-glow);
+    }
+    .pizza-card.status-done {
+      border-color: var(--green);
+      opacity: 0.85;
+    }
+    .pizza-card.zero-lactose {
+      border: 2px solid #ef4444;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+    }
+
+    .pizza-card-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      overflow: hidden;
+      background: #181d29;
+    }
+    .pizza-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .pizza-card:hover .pizza-card-img {
+      transform: scale(1.05);
+    }
+    .pizza-seq-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--amber-light);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+    .pizza-tag-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .tag-salgada { background: rgba(59, 130, 246, 0.85); color: #fff; }
+    .tag-doce { background: rgba(236, 72, 153, 0.85); color: #fff; }
+    .tag-zero { background: rgba(239, 68, 68, 0.95); color: #fff; animation: pulseRed 2s infinite; }
+
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
+      50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.9); }
+    }
+
+    .pizza-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 12px;
+    }
+
+    .pizza-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pizza-card-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Poka-Yoke Banner in Card */
+    .poka-yoke-banner {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: #fca5a5;
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cold-topping-banner {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: #6ee7b7;
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Ingredients List Details */
+    .ingredients-box {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 0.8rem;
+    }
+    .ingredients-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .ingredients-items {
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .ingredients-items strong {
+      color: var(--text-main);
+    }
+
+    /* Card Status Buttons Bar */
+    .status-action-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 6px;
+    }
+    .btn-status {
+      min-height: 48px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      transition: all var(--transition-fast);
+    }
+    .btn-status:hover {
+      background: var(--bg-surface-active);
+      color: var(--text-main);
+    }
+    .btn-status.active-todo {
+      background: rgba(100, 116, 139, 0.25);
+      border-color: #64748b;
+      color: #e2e8f0;
+    }
+    .btn-status.active-oven {
+      background: var(--amber-glow);
+      border-color: var(--amber);
+      color: var(--amber-light);
+      font-weight: 800;
+    }
+    .btn-status.active-done {
+      background: var(--green-glow);
+      border-color: var(--green);
+      color: #6ee7b7;
+      font-weight: 800;
+    }
+
+    .btn-direct-oven {
+      grid-column: span 3;
+      min-height: 44px;
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+      color: #0b0d11;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--amber-glow);
+      transition: all var(--transition-fast);
+    }
+    .btn-direct-oven:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       MODULE 2: FORNO & CRONÔMETRO
+       ========================================================================== */
+    .timer-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .timer-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+    }
+
+    .timer-pizza-selector {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .timer-pizza-select {
+      width: 100%;
+      min-height: 48px;
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .timer-pizza-select:focus {
+      border-color: var(--amber);
+    }
+
+    /* Circular SVG Timer */
+    .timer-display-wrap {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0 20px;
+    }
+    .timer-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+    .timer-circle-bg {
+      fill: none;
+      stroke: var(--bg-surface-elevated);
+      stroke-width: 12;
+    }
+    .timer-circle-progress {
+      fill: none;
+      stroke: var(--amber);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 691;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+    }
+    .timer-circle-progress.gratinar-mode {
+      stroke: var(--red);
+      animation: pulseStroke 1.2s infinite;
+    }
+    @keyframes pulseStroke {
+      0%, 100% { stroke: var(--red); }
+      50% { stroke: #f97316; }
+    }
+
+    .timer-inner-content {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .timer-digits {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 3.4rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--text-main);
+      line-height: 1;
+    }
+    .timer-substate {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 6px;
+    }
+    .timer-temperature-pill {
+      background: var(--bg-surface-active);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    /* Broil / Gratinar Warning Banner */
+    .gratinar-alert-banner {
+      width: 100%;
+      background: rgba(239, 68, 68, 0.15);
+      border: 2px solid var(--red);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      animation: alertPulse 1.5s infinite;
+    }
+    .gratinar-alert-banner.active {
+      display: flex;
+    }
+    @keyframes alertPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(239,68,68,0.3); }
+      50% { transform: scale(1.02); box-shadow: 0 0 25px rgba(239,68,68,0.7); }
+    }
+    .gratinar-alert-text strong {
+      color: #fca5a5;
+      font-size: 0.95rem;
+      display: block;
+    }
+    .gratinar-alert-text span {
+      font-size: 0.82rem;
+      color: #fed7d7;
+    }
+
+    /* Timer Controls */
+    .timer-controls {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    .btn-timer-primary {
+      flex: 2;
+      min-height: 52px;
+      background: var(--amber);
+      color: #0b0d11;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--amber-glow);
+      transition: all var(--transition-fast);
+    }
+    .btn-timer-primary:hover {
+      filter: brightness(1.1);
+    }
+    .btn-timer-primary.btn-pause {
+      background: #f97316;
+    }
+    .btn-timer-secondary {
+      flex: 1;
+      min-height: 52px;
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-timer-secondary:hover {
+      background: var(--bg-surface-active);
+    }
+
+    .preset-btns {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+    .preset-btn {
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 48px;
+      flex: 1;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      color: var(--amber);
+      border-color: var(--amber);
+    }
+
+    /* ==========================================================================
+       MODULE 3: LISTA DE COMPRAS (MERCADO)
+       ========================================================================== */
+    .shopping-summary-card {
+      background: linear-gradient(135deg, #182032, #101624);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .progress-bar-wrap {
+      flex: 1;
+      min-width: 200px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--bg-dark);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--green));
+      border-radius: var(--radius-full);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .btn-reset-shopping {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+    }
+    .btn-reset-shopping:hover {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    .aisle-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .aisle-header {
+      background: var(--bg-surface-elevated);
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .aisle-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .aisle-count {
+      font-size: 0.78rem;
+      background: var(--bg-dark);
+      color: var(--text-muted);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    .shopping-items-list {
+      list-style: none;
+    }
+    .shopping-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      gap: 14px;
+      cursor: pointer;
+      min-height: 52px;
+      transition: background var(--transition-fast);
+    }
+    .shopping-item:last-child {
+      border-bottom: none;
+    }
+    .shopping-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .shopping-checkbox {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 2px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-dark);
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+    }
+    .shopping-item.checked .shopping-checkbox {
+      background: var(--green);
+      border-color: var(--green);
+    }
+    .shopping-item.checked .shopping-checkbox svg {
+      display: block;
+    }
+    .shopping-checkbox svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+      stroke: #0b0d11;
+      stroke-width: 3;
+    }
+
+    .shopping-details {
+      flex: 1;
+    }
+    .shopping-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .shopping-item.checked .shopping-name {
+      text-decoration: line-through;
+      color: var(--text-dim);
+    }
+    .shopping-qty {
+      font-weight: 800;
+      color: var(--amber);
+      white-space: nowrap;
+    }
+    .shopping-item.checked .shopping-qty {
+      color: var(--text-dim);
+    }
+    .shopping-dest {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       MODULE 4: GUIA TÉCNICO & POP DE FORNO
+       ========================================================================== */
+    .pop-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .pop-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pop-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .pop-step-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .pop-step-num {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-surface-elevated);
+      color: var(--amber);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .pop-step-content strong {
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 0.95rem;
+    }
+    .pop-step-content p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+
+    .cold-toppings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.85rem;
+    }
+    .cold-toppings-table th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--bg-surface-elevated);
+      color: var(--amber);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .cold-toppings-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--text-muted);
+    }
+    .cold-toppings-table td strong {
+      color: var(--text-main);
+    }
+
+    /* ==========================================================================
+       MODULE 5: MENU DIGITAL CONVIDADOS
+       ========================================================================== */
+    .menu-hero {
+      background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(245,158,11,0.2));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .menu-hero p {
+      color: var(--amber-light);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .guest-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .guest-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+    .guest-card-img-wrap {
+      width: 100%;
+      height: 180px;
+      position: relative;
+    }
+    .guest-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .guest-card-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .guest-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .guest-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+    .guest-card-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+    .badge-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+    .badge-pill.highlight {
+      background: var(--amber-glow);
+      color: var(--amber-light);
+      border-color: var(--amber);
+    }
+
+    /* Modal for Pizza Details */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      position: relative;
+      box-shadow: var(--shadow-md);
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    /* Toast notification */
+    .toast-notification {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--amber);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(-20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .pizza-grid {
+        grid-template-columns: 1fr;
+      }
+      .brand-title {
+        font-size: 1rem;
+      }
+      .kpi-mini-pill {
+        display: none;
+      }
+      .timer-digits {
+        font-size: 2.8rem;
+      }
+      .timer-display-wrap {
+        width: 220px;
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="brand-group">
+        <div class="brand-badge">🍕</div>
+        <div>
+          <h1 class="brand-title">Pizzaria da <span>Bia</span></h1>
+          <p class="brand-subtitle">18 Anos — Guia da Festa</p>
+        </div>
+      </div>
+      
+      <div class="kpi-mini-pill">
+        <div class="kpi-item"><span class="kpi-dot done"></span> <span id="kpi-done-count">0</span> Prontas</div>
+        <div class="kpi-item"><span class="kpi-dot oven"></span> <span id="kpi-oven-count">0</span> No Forno</div>
+        <div class="kpi-item"><span class="kpi-dot todo"></span> <span id="kpi-todo-count">13</span> Na Fila</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Toast Notification System -->
+  <div id="toast" class="toast-notification">
+    <span id="toast-icon">🔥</span>
+    <span id="toast-msg">Mensagem</span>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+
+    <!-- ======================================================================
+         TAB 1: CONTROLE DE FORNADAS (13 PIZZAS)
+         ====================================================================== -->
+    <section id="tab-kds" class="tab-pane active">
+      <div class="section-title-wrap">
+        <div>
+          <h2 class="section-heading">Controle de Fornadas 👨‍🍳</h2>
+          <p class="section-desc">Cardápio das 13 pizzas com receita, ordem das camadas e controle de fornadas.</p>
+        </div>
+      </div>
+
+      <!-- Quick Filter Pills -->
+      <div class="filter-bar">
+        <button class="filter-pill active" onclick="filterKDS('all', this)">Todas (13)</button>
+        <button class="filter-pill" onclick="filterKDS('todo', this)">Na Fila</button>
+        <button class="filter-pill" onclick="filterKDS('oven', this)">No Forno 🔥</button>
+        <button class="filter-pill" onclick="filterKDS('done', this)">Servidas ✅</button>
+        <button class="filter-pill" onclick="filterKDS('zero-lactose', this)">🚫 Sem Lactose</button>
+        <button class="filter-pill" onclick="filterKDS('doce', this)">🍫 Doces (2)</button>
+      </div>
+
+      <!-- 13 Pizzas Cards Grid -->
+      <div class="pizza-grid" id="pizza-cards-container">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
+
+
+    <!-- ======================================================================
+         TAB 2: TIMER DE FORNO INTELIGENTE
+         ====================================================================== -->
+    <section id="tab-timer" class="tab-pane">
+      <div class="section-title-wrap">
+        <div>
+          <h2 class="section-heading">Timer do Forno ⏱️</h2>
+          <p class="section-desc">Forno bem quente (250°C): 5 min para derreter o queijo + 3 min no Gratinador para dourar.</p>
+        </div>
+      </div>
+
+      <div class="timer-container">
+        <!-- Pizza Selector inside Timer -->
+        <div class="timer-pizza-selector">
+          <label for="timer-select-pizza" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; margin-bottom: 6px; display: block;">
+            Pizza Atual no Forno:
+          </label>
+          <select id="timer-select-pizza" class="timer-pizza-select" aria-label="Selecionar Pizza Atual no Forno" onchange="onTimerSelectPizzaChange()">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Alert Banner when Gratinar Triggered -->
+        <div id="gratinar-alert" class="gratinar-alert-banner">
+          <span style="font-size: 28px;">🔥</span>
+          <div class="gratinar-alert-text">
+            <strong>MOMENTO DO GRATINADOR ATIVADO!</strong>
+            <span>Ligue a função Gratinar/Broil (resistência superior) para dourar e borbulhar o queijo!</span>
+          </div>
+        </div>
+
+        <!-- Circular Display -->
+        <div class="timer-display-wrap">
+          <svg class="timer-svg" viewBox="0 0 240 240">
+            <circle class="timer-circle-bg" cx="120" cy="120" r="110" />
+            <circle id="timer-progress" class="timer-circle-progress" cx="120" cy="120" r="110" />
+          </svg>
+          <div class="timer-inner-content">
+            <div id="timer-time" class="timer-digits">08:00</div>
+            <div id="timer-phase" class="timer-substate">Aguardando</div>
+            <div class="timer-temperature-pill">Forno 250°C</div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+          <button id="btn-timer-toggle" class="btn-timer-primary" onclick="toggleTimer()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span id="btn-timer-text">Iniciar Timer</span>
+          </button>
+          <button class="btn-timer-secondary" onclick="resetTimer()">
+            Reiniciar
+          </button>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="preset-btns">
+          <button class="preset-btn" onclick="setTimerDuration(420)">7 min (Rápido)</button>
+          <button class="preset-btn active" onclick="setTimerDuration(480)">8 min (Padrão)</button>
+          <button class="preset-btn" onclick="setTimerDuration(540)">9 min (Bem Dourada)</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================================
+         TAB 3: LISTA DE COMPRAS INTERATIVA
+         ====================================================================== -->
+    <section id="tab-shopping" class="tab-pane">
+      <div class="section-title-wrap">
+        <div>
+          <h2 class="section-heading">Lista de Compras no Mercado 🛒</h2>
+          <p class="section-desc">Organizada por corredor para comprar rápido no mercado sem esquecer nada.</p>
+        </div>
+      </div>
+
+      <!-- Shopping Progress Card -->
+      <div class="shopping-summary-card">
+        <div class="progress-bar-wrap">
+          <div class="progress-header">
+            <span>Progresso no Carrinho</span>
+            <span id="shopping-progress-text">0 de 0 itens (0%)</span>
+          </div>
+          <div class="progress-track">
+            <div id="shopping-progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+        <button class="btn-reset-shopping" onclick="resetShoppingList()">
+          Desmarcar Todos
+        </button>
+      </div>
+
+      <!-- Aisle Containers -->
+      <div id="shopping-aisles-container">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+
+    <!-- ======================================================================
+         TAB 4: DICAS & SEGREDOS DO FORNO
+         ====================================================================== -->
+    <section id="tab-guide" class="tab-pane">
+      <div class="section-title-wrap">
+        <div>
+          <h2 class="section-heading">Segredos do Forno & Dicas de Ouro 🔥</h2>
+          <p class="section-desc">Dicas práticas para assar rápido, dourar o queijo e deixar a massa bem crocante.</p>
+        </div>
+      </div>
+
+      <!-- Critical Allergy Warning -->
+      <div class="poka-yoke-banner" style="background: rgba(239, 68, 68, 0.2); border-color: var(--red); padding: 16px; margin-bottom: 20px; font-size: 0.9rem;">
+        <span style="font-size: 32px;">🚫</span>
+        <div>
+          <strong style="color: #fca5a5; font-size: 1rem; display: block; margin-bottom: 4px;">⚠️ ALERTA IMPORTANTE: AMIGO COM INTOLERÂNCIA A LACTOSE</strong>
+          A <strong>Pizza nº 3 (Calabresa Marinara)</strong> NÃO leva nenhum queijo. Ela DEVE ser assada sobre folha de papel manteiga/alumínio nova ou antes das outras pizzas para queijo derretido de fornadas anteriores não encostar na massa. Segurança total para o amigo!
+        </div>
+      </div>
+
+      <!-- Steps Card -->
+      <div class="pop-card">
+        <h3 class="pop-card-title">🔥 Como Assar Perfeito no Forno Elétrico (250°C)</h3>
+        <div class="pop-step-list">
+          <div class="pop-step-item">
+            <div class="pop-step-num">1</div>
+            <div class="pop-step-content">
+              <strong>Pré-aquecimento Bem Quente (30 minutos)</strong>
+              <p>Ligue o forno na temperatura máxima (250°C) com 30 min de antecedência com as duas resistências ligadas. Colocar uma assadeira pesada dentro ajuda a manter o forno sempre bem quente.</p>
+            </div>
+          </div>
+          <div class="pop-step-item">
+            <div class="pop-step-num">2</div>
+            <div class="pop-step-content">
+              <strong>Segredo das Bordas (Fio de Azeite)</strong>
+              <p>Massa pré-assada perde umidade rápido. Pincele um leve fio de azeite em toda a borda antes de assar. Ela fica dourada e brilhante sem endurecer.</p>
+            </div>
+          </div>
+          <div class="pop-step-item">
+            <div class="pop-step-num">3</div>
+            <div class="pop-step-content">
+              <strong>Segredo das Camadas (Sem encharcar a massa)</strong>
+              <p>1º Pouco molho espalhado (~85g) ➔ 2º Mussarela selando a massa (~270g) ➔ 3º Recheios ➔ 4º Cebolas e temperos finos por cima para dourarem direto no calor ➔ 5º Orégano.</p>
+            </div>
+          </div>
+          <div class="pop-step-item">
+            <div class="pop-step-num">4</div>
+            <div class="pop-step-content">
+              <strong>Ligar o Gratinador aos 5 minutos</strong>
+              <p>Aos 5 minutos, quando o queijo já derreteu e a base firmou, ligue a função Gratinar (resistência superior) por 2 a 3 minutos até pipocarem aquelas bolhas douradas de pizzaria.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cold Toppings Card -->
+      <div class="pop-card">
+        <h3 class="pop-card-title">🌿 Ingredientes que Entram SÓ DEPOIS do Forno</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;">
+          Ingredientes frescos que perdem o sabor, murcham ou queimam se entrarem no forno quente. Devem ser colocados logo ao tirar a pizza da forma:
+        </p>
+        <table class="cold-toppings-table">
+          <thead>
+            <tr>
+              <th>Pizza</th>
+              <th>Colocar Após Sair do Forno</th>
+              <th>Por que Fazer Assim</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rúcula com Tomate Seco</strong></td>
+              <td>Folhas de rúcula fresca + tomate seco + fio de azeite</td>
+              <td>Rúcula no forno murcha, solta água amarga e perde a crocância fresca.</td>
+            </tr>
+            <tr>
+              <td><strong>Margherita Tradicional</strong></td>
+              <td>Folhas inteiras de manjericão fresco</td>
+              <td>O calor suave da pizza na saída libera todo o aroma do manjericão sem queimar as folhas.</td>
+            </tr>
+            <tr>
+              <td><strong>Sensação com Morangos</strong></td>
+              <td>Morangos frescos fatiados na hora</td>
+              <td>Morango quente solta água ácida e desmancha. A frio, ele fica firme e contrasta perfeitamente com o chocolate.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- ======================================================================
+         TAB 5: MENU DIGITAL DOS CONVIDADOS
+         ====================================================================== -->
+    <section id="tab-menu" class="tab-pane">
+      <div class="menu-hero">
+        <h1>Cardápio da Festa 🎉</h1>
+        <p>18 Anos da Bia — Pizzas deliciosas preparadas e assadas na hora com muito carinho</p>
+      </div>
+
+      <div class="guest-menu-grid" id="guest-menu-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Modal for Detailed Assembly View -->
+  <div id="recipe-modal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeRecipeModal()">✕</button>
+      <div id="modal-content">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Mobile Fixed Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('kds', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M14 9h5"/><path d="M14 15h5"/></svg>
+      <span>Pizzas</span>
+      <span id="nav-kds-badge" class="nav-badge">13</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('timer', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Forno</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('shopping', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span>Compras</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('guide', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Dicas</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('menu', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>Cardápio</span>
+    </button>
+  </nav>
+
+  <!-- Application Logic -->
+  <script>
+    /* ==========================================================================
+       DATA: 13 PIZZAS CONSOLIDADAS
+       ========================================================================== */
+    const PIZZAS_DATA = [
+      {
+        id: 1,
+        name: "Calabresa Acebolada Especial #1",
+        shortName: "Calabresa Acebolada #1",
+        category: "salgada",
+        image: "assets/images/calabresa_acebolada.jpg",
+        desc: "Clássica e campeã de pedidos. Molho artesanal, mussarela, calabresa fatiada fina, cebolas caramelizadas no forno e orégano.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate temperado",
+        cheese: "270g mussarela ralada/fatiada",
+        toppings: "170g linguiça calabresa defumada fatiada fina + bastante cebola em rodelas finas + requeijão em fios + orégano",
+        assembly: [
+          "Pincelar leve fio de azeite nas bordas da massa pré-assada",
+          "Espalhar 85g de molho de tomate em movimentos circulares",
+          "Distribuir 270g de mussarela selando toda a área útil",
+          "Espalhar as fatias finas de calabresa e fios de requeijão",
+          "Cobrir com as rodelas de cebola (para dourarem diretamente no calor)",
+          "Finalizar com orégano e levar ao forno a 250°C"
+        ]
+      },
+      {
+        id: 2,
+        name: "Calabresa Acebolada Especial #2",
+        shortName: "Calabresa Acebolada #2",
+        category: "salgada",
+        image: "assets/images/calabresa_acebolada.jpg",
+        desc: "Segunda unidade da campeã de pedidos para garantir o fluxo contínuo dos convidados.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "170g linguiça calabresa + cebolas + requeijão cremoso + orégano",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "85g de molho espalhado uniforme",
+          "270g de mussarela",
+          "Calabresa fininha + requeijão cremoso",
+          "Cebola fatiada fina por cima de tudo",
+          "Orégano seco"
+        ]
+      },
+      {
+        id: 3,
+        name: "Calabresa Zero Lactose (Marinara Especial)",
+        shortName: "🚫 Zero Lactose (Calabresa)",
+        category: "zero-lactose",
+        image: "assets/images/calabresa_zero_lactose.jpg",
+        desc: "TOTALMENTE SEM QUEIJO. Molho artesanal temperado com alho dourado e azeite extravirgem, farta calabresa defumada, cebolas, azeitonas pretas e orégano.",
+        isZeroLactose: true,
+        coldTopping: null,
+        sauce: "100g molho de tomate encorpado c/ azeite e alho",
+        cheese: "🚫 ZERO QUEIJO (NENHUM TRAÇO DE LACTOSE)",
+        toppings: "200g calabresa defumada fatiada + cebolas finas + azeitonas pretas fatiadas + orégano",
+        assembly: [
+          "⚠️ ATENÇÃO ZERO LACTOSE: Forrar assadeira com papel manteiga/alumínio limpo!",
+          "Pincelar bordas com azeite extravirgem",
+          "Espalhar 100g de molho temperado",
+          "Cobrir fartamente com fatias de calabresa defumada",
+          "Adicionar cebolas em rodelas finas e azeitonas pretas",
+          "Finalizar com orégano e assar separadamente"
+        ]
+      },
+      {
+        id: 4,
+        name: "Frango com Catupiry #1",
+        shortName: "Frango c/ Catupiry #1",
+        category: "salgada",
+        image: "assets/images/frango_catupiry.jpg",
+        desc: "Frango desfiado temperado com páprica e ervas finas, mussarela derretida e espirais generosas de requeijão cremoso.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "180g peito de frango cozido e desfiado temperado + requeijão em espiral + orégano",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "Espalhar 85g de molho",
+          "Adicionar 270g de mussarela",
+          "Distribuir o frango desfiado uniformemente",
+          "Aplicar requeijão cremoso em espiral da borda ao centro",
+          "Salpicar orégano"
+        ]
+      },
+      {
+        id: 5,
+        name: "Frango com Catupiry #2",
+        shortName: "Frango c/ Catupiry #2",
+        category: "salgada",
+        image: "assets/images/frango_catupiry.jpg",
+        desc: "Segunda unidade do clássico suculento preferido dos adolescentes.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "180g frango desfiado + requeijão cremoso em espiral + orégano",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "Molho de tomate + mussarela selante",
+          "Frango desfiado temperado",
+          "Requeijão em espiral generosa",
+          "Orégano e forno 250°C"
+        ]
+      },
+      {
+        id: 6,
+        name: "Frango com Catupiry #3",
+        shortName: "Frango c/ Catupiry #3",
+        category: "salgada",
+        image: "assets/images/frango_catupiry.jpg",
+        desc: "Terceira unidade garantindo alto rendimento e satisfação unânime.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "180g frango desfiado + requeijão cremoso + orégano",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "Molho + mussarela",
+          "Frango desfiado + requeijão cremoso",
+          "Orégano"
+        ]
+      },
+      {
+        id: 7,
+        name: "Rúcula com Tomate Seco",
+        shortName: "Rúcula c/ Tomate Seco",
+        category: "salgada",
+        image: "assets/images/rucula_tomate_seco.jpg",
+        desc: "Sofisticação e frescor. Base assada de mussarela e molho, finalizada PÓS-FORNO com folhas frescas de rúcula, tomate seco nobre e fio de azeite.",
+        isZeroLactose: false,
+        coldTopping: "🌿 RÚCULA + TOMATE SECO APLICADOS PÓS-FORNO (A FRIO)",
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "100g tomate seco em conserva + 1 maço de rúcula fresca lavada + azeite extravirgem",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "Espalhar 85g de molho de tomate",
+          "Cobrir com 270g de mussarela",
+          "LEVAR AO FORNO APENAS COM MOLHO E QUEIJO até dourar bolhas (7 a 8 min)",
+          "⚠️ RETIRAR DO FORNO E IMEDIATAMENTE:",
+          "Distribuir o tomate seco fatiado",
+          "Cobrir com as folhas frescas de rúcula",
+          "Finalizar com fio generoso de azeite extravirgem"
+        ]
+      },
+      {
+        id: 8,
+        name: "Bacon Supreme & Cheddar",
+        shortName: "Bacon Supreme Cheddar",
+        category: "salgada",
+        image: "assets/images/bacon_supreme.jpg",
+        desc: "Hit absoluto da galera jovem. Cubos crocantes de bacon tostado, cheddar cremoso, mussarela derretida e cebolinha verde fresca.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "180g bacon em cubos (pré-tostado) + cheddar cremoso em fios + cebolinha verde picadinha",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "85g molho de tomate",
+          "270g mussarela",
+          "Espalhar bacon crocante pré-tostado",
+          "Fios de cheddar cremoso",
+          "Salpicar cebolinha verde fresca antes de servir"
+        ]
+      },
+      {
+        id: 9,
+        name: "Quatro Queijos Econômica",
+        shortName: "Quatro Queijos",
+        category: "salgada",
+        image: "assets/images/quatro_queijos.jpg",
+        desc: "Equilíbrio gourmet e aromático. Combinação de mussarela, provolone defumado gratinado, requeijão culinário e toques picantes de gorgonzola.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "200g mussarela + 80g provolone ralado + 80g requeijão + 40g gorgonzola esfarelado",
+        toppings: "Blend de 4 queijos + orégano",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "85g molho de tomate fino",
+          "Base de 200g de mussarela",
+          "Distribuir o provolone defumado ralado",
+          "Pontos estratégicos de requeijão cremoso e gorgonzola esfarelado",
+          "Orégano e levar ao forno para fundir completamente"
+        ]
+      },
+      {
+        id: 10,
+        name: "Margherita Tradicional",
+        shortName: "Margherita Tradicional",
+        category: "salgada",
+        image: "assets/images/margherita.jpg",
+        desc: "A clássica italiana. Molho de tomate encorpado, mussarela derretida, rodelas de tomate fresco e folhas de manjericão fresco aplicadas logo na saída do forno.",
+        isZeroLactose: false,
+        coldTopping: "🌿 FOLHAS DE MANJERICÃO APLICADAS PÓS-FORNO",
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela + 30g queijo parmesão ralado",
+        toppings: "Tomates maduros em rodelas finas + folhas frescas de manjericão + azeite",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "85g molho de tomate",
+          "270g mussarela",
+          "Rodelas de tomate fresco polvilhadas com queijo parmesão ralado",
+          "Assar até dourar o queijo",
+          "⚠️ AO RETIRAR DO FORNO: dispor as folhas frescas de manjericão e fio de azeite"
+        ]
+      },
+      {
+        id: 11,
+        name: "Portuguesa Família",
+        shortName: "Portuguesa Família",
+        category: "salgada",
+        image: "assets/images/portuguesa.jpg",
+        desc: "Sabor tradicional e farto. Presunto fatiado, mussarela, rodelas de ovos cozidos, rodelas finas de cebola, ervilhas frescas, azeitonas e orégano.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "85g molho de tomate",
+        cheese: "270g mussarela",
+        toppings: "150g presunto picado + 2 ovos cozidos fatiados + cebola fina + ervilha + azeitonas pretas",
+        assembly: [
+          "Pincelar bordas com azeite",
+          "85g de molho de tomate",
+          "270g de mussarela",
+          "Camada de presunto fatiado",
+          "Rodelas de ovos cozidos, cebola fina e ervilha",
+          "Azeitonas e orégano por cima de tudo"
+        ]
+      },
+      {
+        id: 12,
+        name: "Sensação com Morangos",
+        shortName: "Sensação (Chocolate/Morango)",
+        category: "doce",
+        image: "assets/images/sensacao_morango.jpg",
+        desc: "Sobremesa irresistível. Ganache aveludada de chocolate meio amargo/leite aquecida levemente e coberta PÓS-FORNO com morangos frescos fatiados a frio.",
+        isZeroLactose: false,
+        coldTopping: "🍓 MORANGOS FRESCOS FATIADOS PÓS-FORNO (NUNCA ASSAR)",
+        sauce: "Base doce: 250g ganache cremosa de chocolate",
+        cheese: "🚫 Sem queijo salgado",
+        toppings: "1 bandeja de morangos frescos fatiados a frio + raspas de chocolate",
+        assembly: [
+          "Aquecer a massa de pizza pré-assada pura por 2 minutos no forno",
+          "Retirar e espalhar a ganache de chocolate suavemente",
+          "Retornar ao forno por apenas 1 minuto para dar brilho à ganache",
+          "⚠️ RETIRAR DO FORNO:",
+          "Organizar as fatias de morangos frescos por toda a pizza",
+          "Finalizar com raspas de chocolate para apresentação perfeita"
+        ]
+      },
+      {
+        id: 13,
+        name: "Banana Nevada (Doce de Leite & Canela)",
+        shortName: "Banana Nevada",
+        category: "doce",
+        image: "assets/images/banana_nevada.jpg",
+        desc: "Doce de leite cremoso nobre, rodelas de banana madura, perfume de canela e raspas de chocolate branco gratinado no topo.",
+        isZeroLactose: false,
+        coldTopping: null,
+        sauce: "Base doce: 250g de doce de leite cremoso firme",
+        cheese: "🚫 Sem queijo salgado",
+        toppings: "4 bananas maduras fatiadas + canela em pó + 80g chocolate branco ralado",
+        assembly: [
+          "Pincelar leve manteiga/óleo nas bordas",
+          "Espalhar generosamente o doce de leite como base",
+          "Dispor as rodelas de banana em círculos concêntricos",
+          "Polvilhar canela em pó",
+          "Cobrir com raspas de chocolate branco",
+          "Levar ao forno na função GRATINAR por 2 a 3 min para fundir o chocolate branco"
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       DATA: LISTA DE COMPRAS CONSOLIDADA
+       ========================================================================== */
+    const SHOPPING_DATA = [
+      {
+        aisle: "Frios e Laticínios",
+        icon: "🧀",
+        items: [
+          { id: "s1", name: "Mussarela fatiada ou peça", qty: "2,8 a 3,0 kg", dest: "10 salgadas (Zero Lactose não leva)" },
+          { id: "s2", name: "Requeijão Culinário (bisnaga firme)", qty: "1 bisnaga (1 kg)", dest: "Frango (3), Calabresa (2), 4 Queijos (1)" },
+          { id: "s3", name: "Cheddar cremoso (bisnaga ou pote)", qty: "1 un (400g)", dest: "Bacon Supreme" },
+          { id: "s4", name: "Provolone defumado", qty: "150g", dest: "4 Queijos" },
+          { id: "s5", name: "Gorgonzola", qty: "100g (1 cunha)", dest: "4 Queijos" },
+          { id: "s6", name: "Parmesão p/ ralar", qty: "50g a 100g", dest: "Margherita" },
+          { id: "s7", name: "Presunto cozido fatiado", qty: "150g a 200g", dest: "Portuguesa" },
+          { id: "s8", name: "Bacon em cubos ou manta", qty: "350g a 400g", dest: "Bacon Supreme" }
+        ]
+      },
+      {
+        aisle: "Carnes & Aves",
+        icon: "🥩",
+        items: [
+          { id: "s9", name: "Linguiça Calabresa defumada", qty: "700g (4–5 gomos)", dest: "2 Aceboladas + 1 Zero Lactose" },
+          { id: "s10", name: "Peito de Frango cru", qty: "800g (rende ~560g desfiado)", dest: "3 Frango com Catupiry" }
+        ]
+      },
+      {
+        aisle: "Hortifruti",
+        icon: "🥦",
+        items: [
+          { id: "s11", name: "Cebolas médias (branca/roxa)", qty: "5 a 6 un", dest: "3 Calabresas + Portuguesa" },
+          { id: "s12", name: "Rúcula fresca", qty: "1 maço viçoso", dest: "Rúcula c/ Tomate Seco (pós-forno)" },
+          { id: "s13", name: "Tomate Seco em conserva", qty: "1 pote (100g–150g)", dest: "Rúcula c/ Tomate Seco" },
+          { id: "s14", name: "Tomates maduros", qty: "3 a 4 un", dest: "Margherita" },
+          { id: "s15", name: "Morangos frescos", qty: "1 bandeja (250g)", dest: "Sensação (pós-forno)" },
+          { id: "s16", name: "Bananas nanicas maduras", qty: "4 a 5 un", dest: "Banana Nevada" },
+          { id: "s17", name: "Manjericão fresco", qty: "1 maço", dest: "Margherita (pós-forno)" },
+          { id: "s18", name: "Cebolinha verde", qty: "1 maço pequeno", dest: "Bacon Supreme" }
+        ]
+      },
+      {
+        aisle: "Mercearia & Empório",
+        icon: "🥫",
+        items: [
+          { id: "s19", name: "Massas de pizza pré-assadas (35cm)", qty: "13 discos", dest: "Base de todas as pizzas" },
+          { id: "s20", name: "Molho de tomate (passata/sachê)", qty: "3 sachês (340g cada)", dest: "Base de 11 salgadas (~1 kg)" },
+          { id: "s21", name: "Azeitonas pretas fatiadas s/ caroço", qty: "1 pote (150g)", dest: "Zero Lactose + Portuguesa" },
+          { id: "s22", name: "Ervilha em conserva", qty: "1 lata pequena", dest: "Portuguesa" },
+          { id: "s23", name: "Orégano seco", qty: "1 saquinho", dest: "Todas as salgadas" },
+          { id: "s24", name: "Azeite de Oliva Extra Virgem", qty: "1 garrafa", dest: "Bordas, marinara, rúcula" },
+          { id: "s25", name: "Ovos", qty: "3 un", dest: "Portuguesa (cozinhar 2)" }
+        ]
+      },
+      {
+        aisle: "Doces & Confeitaria",
+        icon: "🍬",
+        items: [
+          { id: "s26", name: "Doce de Leite cremoso firme", qty: "1 pote (400g)", dest: "Banana Nevada" },
+          { id: "s27", name: "Chocolate ao Leite ou Nutella", qty: "250g a 300g", dest: "Sensação (ganache)" },
+          { id: "s28", name: "Chocolate Branco em barra", qty: "1 barra (90g)", dest: "Banana Nevada (ralar)" },
+          { id: "s29", name: "Canela em pó", qty: "1 frasco", dest: "Banana Nevada" }
+        ]
+      },
+      {
+        aisle: "Bebidas & Gelo",
+        icon: "🥤",
+        items: [
+          { id: "s30", name: "Coca-Cola Tradicional (2 Litros)", qty: "2 garrafas (4L)", dest: "Bebida adolescentes" },
+          { id: "s31", name: "Guaraná Antarctica (2 Litros)", qty: "2 garrafas (4L)", dest: "Bebida adolescentes" },
+          { id: "s32", name: "Coca-Cola Zero Açúcar (2 Litros)", qty: "1 garrafa (2L)", dest: "Opção Zero Açúcar" },
+          { id: "s33", name: "Água Mineral 500ml", qty: "1 fardo (12 un)", dest: "Hidratação essencial" },
+          { id: "s34", name: "Gelo Filtrado", qty: "1 a 2 sacos (5kg)", dest: "Manter bebidas geladas" }
+        ]
+      },
+      {
+        aisle: "Descartáveis & Apoio",
+        icon: "🍴",
+        items: [
+          { id: "s35", name: "Guardanapos de papel", qty: "2 pacotes", dest: "Uso dos convidados" },
+          { id: "s36", name: "Copos descartáveis 300–400ml", qty: "1 pacote (50 un)", dest: "Bebidas" },
+          { id: "s37", name: "Papel alumínio ou manteiga", qty: "1 rolo", dest: "Amigo Zero Lactose" },
+          { id: "s38", name: "Cortador de pizza (carretilha)", qty: "1 un", dest: "Fatiar" }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       STATE MANAGEMENT (LOCALSTORAGE PERSISTENCE)
+       ========================================================================== */
+    const STORAGE_KEY_STATUS = 'bia_pizza_status_v1';
+    const STORAGE_KEY_SHOPPING = 'bia_pizza_shopping_v1';
+
+    let pizzaStatusMap = {};
+    let shoppingCheckedMap = {};
+
+    function loadState() {
+      try {
+        const savedStatus = localStorage.getItem(STORAGE_KEY_STATUS);
+        if (savedStatus) pizzaStatusMap = JSON.parse(savedStatus);
+        
+        const savedShopping = localStorage.getItem(STORAGE_KEY_SHOPPING);
+        if (savedShopping) shoppingCheckedMap = JSON.parse(savedShopping);
+      } catch (e) {
+        console.error("Erro ao carregar localStorage:", e);
+      }
+    }
+
+    function savePizzaStatus() {
+      localStorage.setItem(STORAGE_KEY_STATUS, JSON.stringify(pizzaStatusMap));
+      updateKPICounters();
+    }
+
+    function saveShoppingState() {
+      localStorage.setItem(STORAGE_KEY_SHOPPING, JSON.stringify(shoppingCheckedMap));
+      updateShoppingProgress();
+    }
+
+    function getPizzaStatus(id) {
+      return pizzaStatusMap[id] || 'todo'; // 'todo', 'oven', 'done'
+    }
+
+    function setPizzaStatus(id, status) {
+      pizzaStatusMap[id] = status;
+      savePizzaStatus();
+      renderKDSCards();
+      
+      const p = PIZZAS_DATA.find(x => x.id === id);
+      if (status === 'oven') {
+        showToast("🔥 " + p.shortName + " enviada para o FORNO!");
+        document.getElementById('timer-select-pizza').value = id;
+      } else if (status === 'done') {
+        showToast("✅ " + p.shortName + " SERVIDA com sucesso!");
+        playChime('done');
+      }
+    }
+
+    function sendDirectToOven(id) {
+      setPizzaStatus(id, 'oven');
+      document.getElementById('timer-select-pizza').value = id;
+      switchTab('timer');
+      startTimerForPizza(id);
+    }
+
+    /* ==========================================================================
+       AUDIO SYNTHESIZER (WEB AUDIO API)
+       ========================================================================== */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playChime(type) {
+      try {
+        const ctx = getAudioContext();
+        if (type === 'gratinar') {
+          const now = ctx.currentTime;
+          [587.33, 880, 587.33, 880].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + i * 0.15);
+            gain.gain.setValueAtTime(0.3, now + i * 0.15);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.15 + 0.12);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + i * 0.15);
+            osc.stop(now + i * 0.15 + 0.12);
+          });
+          if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 300]);
+        } else if (type === 'done') {
+          const now = ctx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 1.2);
+          });
+          if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
+        }
+      } catch (e) {
+        console.log("Audio API não pôde tocar:", e);
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    /* ==========================================================================
+       TAB SWITCHING
+       ========================================================================== */
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+
+      if (btnElement) {
+        btnElement.classList.add('active');
+      } else {
+        const btn = document.querySelector(`.nav-btn[onclick*="${tabId}"]`);
+        if (btn) btn.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==========================================================================
+       KDS RENDER & FILTERS
+       ========================================================================== */
+    let currentFilter = 'all';
+
+    function filterKDS(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderKDSCards();
+    }
+
+    function renderKDSCards() {
+      const container = document.getElementById('pizza-cards-container');
+      container.innerHTML = '';
+
+      const filtered = PIZZAS_DATA.filter(p => {
+        const status = getPizzaStatus(p.id);
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'todo') return status === 'todo';
+        if (currentFilter === 'oven') return status === 'oven';
+        if (currentFilter === 'done') return status === 'done';
+        if (currentFilter === 'zero-lactose') return p.isZeroLactose;
+        if (currentFilter === 'doce') return p.category === 'doce';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+            <p style="font-size: 1.1rem; font-weight: 600;">Nenhuma pizza encontrada neste filtro.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(pizza => {
+        const status = getPizzaStatus(pizza.id);
+        const card = document.createElement('div');
+        card.className = `pizza-card status-${status} ${pizza.isZeroLactose ? 'zero-lactose' : ''}`;
+
+        let tagClass = 'tag-salgada';
+        let tagText = 'Salgada';
+        if (pizza.isZeroLactose) {
+          tagClass = 'tag-zero';
+          tagText = '🚫 Zero Lactose';
+        } else if (pizza.category === 'doce') {
+          tagClass = 'tag-doce';
+          tagText = '🍫 Doce';
+        }
+
+        let pokaBanner = '';
+        if (pizza.isZeroLactose) {
+          pokaBanner = `
+            <div class="poka-yoke-banner">
+              <span>⚠️</span>
+              <span>POKA-YOKE: Zero queijo! Assar em forma limpa.</span>
+            </div>
+          `;
+        }
+
+        let coldBanner = '';
+        if (pizza.coldTopping) {
+          coldBanner = `
+            <div class="cold-topping-banner">
+              <span>🌿</span>
+              <span>${pizza.coldTopping}</span>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="pizza-card-img-wrap" onclick="openRecipeModal(${pizza.id})" style="cursor: pointer;">
+            <img src="${pizza.image}" alt="${pizza.name}" class="pizza-card-img" loading="lazy">
+            <span class="pizza-seq-badge">#${pizza.id} de 13</span>
+            <span class="pizza-tag-badge ${tagClass}">${tagText}</span>
+          </div>
+
+          <div class="pizza-card-body">
+            <div class="pizza-card-title" onclick="openRecipeModal(${pizza.id})" style="cursor: pointer;">
+              <span>${pizza.name}</span>
+            </div>
+            
+            <p class="pizza-card-meta">${pizza.desc}</p>
+
+            ${pokaBanner}
+            ${coldBanner}
+
+            <div class="ingredients-box">
+              <div class="ingredients-title">Ingredientes da Receita</div>
+              <div class="ingredients-items">
+                <div>🍅 <strong>Molho:</strong> ${pizza.sauce}</div>
+                <div>🧀 <strong>Queijo:</strong> ${pizza.cheese}</div>
+                <div>🥩 <strong>Recheio:</strong> ${pizza.toppings}</div>
+              </div>
+            </div>
+
+            <!-- Direct oven action button -->
+            ${status !== 'done' ? `
+              <button class="btn-direct-oven" onclick="sendDirectToOven(${pizza.id})">
+                <span>🔥 Colocar no Forno (Timer)</span>
+              </button>
+            ` : ''}
+
+            <!-- Status Buttons Bar -->
+            <div class="status-action-row">
+              <button class="btn-status ${status === 'todo' ? 'active-todo' : ''}" onclick="setPizzaStatus(${pizza.id}, 'todo')">
+                <span>📋</span>
+                <span>Na Fila</span>
+              </button>
+              <button class="btn-status ${status === 'oven' ? 'active-oven' : ''}" onclick="setPizzaStatus(${pizza.id}, 'oven')">
+                <span>🔥</span>
+                <span>No Forno</span>
+              </button>
+              <button class="btn-status ${status === 'done' ? 'active-done' : ''}" onclick="setPizzaStatus(${pizza.id}, 'done')">
+                <span>✅</span>
+                <span>Servida</span>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateKPICounters() {
+      let done = 0;
+      let oven = 0;
+      let todo = 0;
+
+      PIZZAS_DATA.forEach(p => {
+        const s = getPizzaStatus(p.id);
+        if (s === 'done') done++;
+        else if (s === 'oven') oven++;
+        else todo++;
+      });
+
+      document.getElementById('kpi-done-count').textContent = done;
+      document.getElementById('kpi-oven-count').textContent = oven;
+      document.getElementById('kpi-todo-count').textContent = todo;
+
+      const remaining = todo + oven;
+      document.getElementById('nav-kds-badge').textContent = remaining;
+    }
+
+    /* ==========================================================================
+       MODAL DE MONTAGEM DETALHADA
+       ========================================================================== */
+    function openRecipeModal(id) {
+      const pizza = PIZZAS_DATA.find(p => p.id === id);
+      if (!pizza) return;
+
+      const content = document.getElementById('modal-content');
+      content.innerHTML = `
+        <img src="${pizza.image}" alt="${pizza.name}" style="width: 100%; height: 220px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 16px;">
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--text-main); margin-bottom: 6px;">
+          ${pizza.name}
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">${pizza.desc}</p>
+        
+        <div style="background: var(--bg-surface-elevated); padding: 14px; border-radius: var(--radius-md); margin-bottom: 18px;">
+          <h4 style="color: var(--amber); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 8px;">Ingredientes & Quantidades</h4>
+          <p style="font-size: 0.85rem; margin-bottom: 4px;">🍅 <strong>Molho:</strong> ${pizza.sauce}</p>
+          <p style="font-size: 0.85rem; margin-bottom: 4px;">🧀 <strong>Queijo:</strong> ${pizza.cheese}</p>
+          <p style="font-size: 0.85rem;">🥩 <strong>Recheio:</strong> ${pizza.toppings}</p>
+        </div>
+
+        <h4 style="color: var(--text-main); font-size: 0.95rem; margin-bottom: 10px;">Como Montar (Passo a Passo):</h4>
+        <ol style="padding-left: 20px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">
+          ${pizza.assembly.map(step => `<li style="margin-bottom: 6px;">${step}</li>`).join('')}
+        </ol>
+
+        <div style="margin-top: 20px;">
+          <button class="btn-direct-oven" style="width: 100%;" onclick="closeRecipeModal(); sendDirectToOven(${pizza.id});">
+            🔥 Colocar no Forno (Timer)
+          </button>
+        </div>
+      `;
+
+      document.getElementById('recipe-modal').classList.add('open');
+    }
+
+    function closeRecipeModal() {
+      document.getElementById('recipe-modal').classList.remove('open');
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === 'recipe-modal') {
+        closeRecipeModal();
+      }
+    }
+
+    /* ==========================================================================
+       TIMER ENGINE
+       ========================================================================== */
+    let timerTotalSeconds = 480; // 8 minutes default
+    let timerRemainingSeconds = 480;
+    let timerInterval = null;
+    let isTimerRunning = false;
+    let gratinarTriggered = false;
+
+    function populateTimerSelector() {
+      const select = document.getElementById('timer-select-pizza');
+      select.innerHTML = '<option value="0">Modo Livre (Qualquer Pizza)</option>';
+      PIZZAS_DATA.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `#${p.id} - ${p.name}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function onTimerSelectPizzaChange() {
+      // Handler when user selects pizza
+    }
+
+    function setTimerDuration(seconds) {
+      timerTotalSeconds = seconds;
+      timerRemainingSeconds = seconds;
+      gratinarTriggered = false;
+      document.getElementById('gratinar-alert').classList.remove('active');
+      document.getElementById('timer-progress').classList.remove('gratinar-mode');
+      
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(seconds));
+      });
+
+      updateTimerDisplay();
+    }
+
+    function startTimerForPizza(id) {
+      document.getElementById('timer-select-pizza').value = id;
+      setTimerDuration(480);
+      if (!isTimerRunning) {
+        toggleTimer();
+      }
+    }
+
+    function toggleTimer() {
+      getAudioContext();
+      const btn = document.getElementById('btn-timer-toggle');
+      const btnText = document.getElementById('btn-timer-text');
+
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        btn.classList.add('btn-pause');
+        btnText.textContent = "Continuar Forneamento";
+        document.getElementById('timer-phase').textContent = "Pausado";
+      } else {
+        isTimerRunning = true;
+        btn.classList.remove('btn-pause');
+        btnText.textContent = "Pausar";
+        
+        timerInterval = setInterval(() => {
+          if (timerRemainingSeconds > 0) {
+            timerRemainingSeconds--;
+            
+            const elapsed = timerTotalSeconds - timerRemainingSeconds;
+            if (elapsed >= 300 && !gratinarTriggered) {
+              gratinarTriggered = true;
+              triggerGratinarAlert();
+            }
+
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            btnText.textContent = "Iniciar Forneamento";
+            onTimerComplete();
+          }
+        }, 1000);
+
+        updateTimerDisplay();
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerRemainingSeconds = timerTotalSeconds;
+      gratinarTriggered = false;
+      
+      document.getElementById('btn-timer-toggle').classList.remove('btn-pause');
+      document.getElementById('btn-timer-text').textContent = "Iniciar Forneamento";
+      document.getElementById('gratinar-alert').classList.remove('active');
+      document.getElementById('timer-progress').classList.remove('gratinar-mode');
+      document.getElementById('timer-phase').textContent = "Aguardando";
+      
+      updateTimerDisplay();
+    }
+
+    function triggerGratinarAlert() {
+      document.getElementById('gratinar-alert').classList.add('active');
+      document.getElementById('timer-progress').classList.add('gratinar-mode');
+      document.getElementById('timer-phase').textContent = "🔥 GRATINAR (BROIL)";
+      playChime('gratinar');
+      showToast("🔥 ATENÇÃO: Ligar o Gratinador (Broil) agora!");
+    }
+
+    function onTimerComplete() {
+      document.getElementById('timer-phase').textContent = "✅ CONCLUÍDO!";
+      document.getElementById('gratinar-alert').classList.remove('active');
+      playChime('done');
+      
+      const selectedPizzaId = parseInt(document.getElementById('timer-select-pizza').value);
+      if (selectedPizzaId > 0) {
+        setPizzaStatus(selectedPizzaId, 'done');
+        showToast("🎉 Pizza #" + selectedPizzaId + " está pronta e foi marcada como Servida!");
+      } else {
+        showToast("🎉 Pizza assada com sucesso!");
+      }
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerRemainingSeconds / 60);
+      const secs = timerRemainingSeconds % 60;
+      document.getElementById('timer-time').textContent = 
+        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+      const totalCircumference = 691.15;
+      const progressFraction = timerRemainingSeconds / timerTotalSeconds;
+      const offset = totalCircumference * (1 - progressFraction);
+      document.getElementById('timer-progress').style.strokeDashoffset = offset;
+
+      if (isTimerRunning && !gratinarTriggered) {
+        document.getElementById('timer-phase').textContent = "Cocção Base";
+      }
+    }
+
+    /* ==========================================================================
+       LISTA DE COMPRAS
+       ========================================================================== */
+    function renderShoppingList() {
+      const container = document.getElementById('shopping-aisles-container');
+      container.innerHTML = '';
+
+      SHOPPING_DATA.forEach(aisle => {
+        const aisleCard = document.createElement('div');
+        aisleCard.className = 'aisle-card';
+
+        const totalItems = aisle.items.length;
+        const checkedItems = aisle.items.filter(i => shoppingCheckedMap[i.id]).length;
+
+        aisleCard.innerHTML = `
+          <div class="aisle-header">
+            <h3 class="aisle-title">
+              <span>${aisle.icon}</span>
+              <span>${aisle.aisle}</span>
+            </h3>
+            <span class="aisle-count" id="count-${aisle.aisle.replace(/[^a-zA-Z0-9]/g, '')}">${checkedItems}/${totalItems} comprados</span>
+          </div>
+          <ul class="shopping-items-list">
+            ${aisle.items.map(item => {
+              const isChecked = !!shoppingCheckedMap[item.id];
+              return `
+                <li class="shopping-item ${isChecked ? 'checked' : ''}" onclick="toggleShoppingItem('${item.id}', this, '${aisle.aisle}')">
+                  <div class="shopping-checkbox">
+                    <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                  <div class="shopping-details">
+                    <div class="shopping-name">
+                      <span>${item.name}</span>
+                      <span class="shopping-qty">${item.qty}</span>
+                    </div>
+                    <div class="shopping-dest">Destino: ${item.dest}</div>
+                  </div>
+                </li>
+              `;
+            }).join('')}
+          </ul>
+        `;
+        container.appendChild(aisleCard);
+      });
+
+      updateShoppingProgress();
+    }
+
+    function toggleShoppingItem(id, liElement, aisleName) {
+      shoppingCheckedMap[id] = !shoppingCheckedMap[id];
+      saveShoppingState();
+      
+      liElement.classList.toggle('checked', shoppingCheckedMap[id]);
+      
+      const aisleObj = SHOPPING_DATA.find(a => a.aisle === aisleName);
+      if (aisleObj) {
+        const total = aisleObj.items.length;
+        const checked = aisleObj.items.filter(i => shoppingCheckedMap[i.id]).length;
+        const sanitized = aisleName.replace(/[^a-zA-Z0-9]/g, '');
+        const countBadge = document.getElementById('count-' + sanitized);
+        if (countBadge) countBadge.textContent = `${checked}/${total} comprados`;
+      }
+    }
+
+    function updateShoppingProgress() {
+      let total = 0;
+      let checked = 0;
+
+      SHOPPING_DATA.forEach(aisle => {
+        aisle.items.forEach(item => {
+          total++;
+          if (shoppingCheckedMap[item.id]) checked++;
+        });
+      });
+
+      const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+      document.getElementById('shopping-progress-text').textContent = `${checked} de ${total} itens (${pct}%)`;
+      document.getElementById('shopping-progress-fill').style.width = `${pct}%`;
+    }
+
+    function resetShoppingList() {
+      if (confirm("Deseja desmarcar todos os itens da lista de compras?")) {
+        shoppingCheckedMap = {};
+        saveShoppingState();
+        renderShoppingList();
+        showToast("Lista de compras reiniciada!");
+      }
+    }
+
+    /* ==========================================================================
+       MENU DIGITAL CONVIDADOS
+       ========================================================================== */
+    function renderGuestMenu() {
+      const container = document.getElementById('guest-menu-container');
+      container.innerHTML = '';
+
+      const distinctFlavors = [
+        {
+          name: "Calabresa Acebolada Especial",
+          image: "assets/images/calabresa_acebolada.jpg",
+          desc: "Fatias finas de calabresa defumada artesanal, cebolas douradas no forno elétrico, toque suave de requeijão cremoso e orégano.",
+          badge: "⭐ Campeã de Pedidos",
+          type: "Salgada"
+        },
+        {
+          name: "Calabresa Zero Lactose (Marinara)",
+          image: "assets/images/calabresa_zero_lactose.jpg",
+          desc: "Especialmente preparada SEM NENHUM QUEIJO. Molho de tomate rústico com alho e azeite extravirgem, muita calabresa e azeitonas pretas.",
+          badge: "🚫 100% Sem Lactose",
+          type: "Especial"
+        },
+        {
+          name: "Frango com Catupiry",
+          image: "assets/images/frango_catupiry.jpg",
+          desc: "Frango tenro desfiado temperado com páprica nobre e ervas, coberto com espirais generosas de requeijão cremoso tipo Catupiry.",
+          badge: "❤️ Favorita",
+          type: "Salgada"
+        },
+        {
+          name: "Rúcula com Tomate Seco",
+          image: "assets/images/rucula_tomate_seco.jpg",
+          desc: "Mussarela dourada crocante, coberta após sair do forno com folhas frescas e viçosas de rúcula, tomate seco artesanal e azeite.",
+          badge: "🌿 Frescor Gourmet",
+          type: "Salgada"
+        },
+        {
+          name: "Bacon Supreme & Cheddar",
+          image: "assets/images/bacon_supreme.jpg",
+          desc: "Bacon crocante em cubinhos tostados, fios aveludados de cheddar cremoso, mussarela derretida e cebolinha verde fresca.",
+          badge: "🥓 Hit dos Jovens",
+          type: "Salgada"
+        },
+        {
+          name: "Quatro Queijos Selecionados",
+          image: "assets/images/quatro_queijos.jpg",
+          desc: "Harmonia cremosa entre mussarela derretida, provolone defumado, requeijão culinário e toques sofisticados de gorgonzola.",
+          badge: "🧀 Sabor Intenso",
+          type: "Salgada"
+        },
+        {
+          name: "Margherita Tradicional",
+          image: "assets/images/margherita.jpg",
+          desc: "Mussarela derretida, rodelas de tomate fresco, queijo parmesão ralado e folhas perfumadas de manjericão fresco aplicadas na saída do forno.",
+          badge: "🇮🇹 Clássica Italiana",
+          type: "Salgada"
+        },
+        {
+          name: "Portuguesa Família",
+          image: "assets/images/portuguesa.jpg",
+          desc: "Presunto suculento, mussarela, rodelas de ovos cozidos, cebola fininha, ervilhas tenras, azeitonas e orégano.",
+          badge: "👨‍👩‍👧‍👦 Tradicional",
+          type: "Salgada"
+        },
+        {
+          name: "Sensação com Morangos",
+          image: "assets/images/sensacao_morango.jpg",
+          desc: "Ganache nobre de chocolate ao leite brilhante, decorada na saída do forno com morangos frescos fatiados a frio e raspas de chocolate.",
+          badge: "🍓 Sobremesa dos Deuses",
+          type: "Doce"
+        },
+        {
+          name: "Banana Nevada com Canela",
+          image: "assets/images/banana_nevada.jpg",
+          desc: "Base generosa de doce de leite cremoso, rodelas de banana madura, perfume de canela e raspas de chocolate branco gratinado no topo.",
+          badge: "🍌 Incrível Doce",
+          type: "Doce"
+        }
+      ];
+
+      distinctFlavors.forEach(flavor => {
+        const card = document.createElement('div');
+        card.className = 'guest-card';
+        card.innerHTML = `
+          <div class="guest-card-img-wrap">
+            <img src="${flavor.image}" alt="${flavor.name}" class="guest-card-img" loading="lazy">
+          </div>
+          <div class="guest-card-body">
+            <h3 class="guest-card-title">${flavor.name}</h3>
+            <p class="guest-card-desc">${flavor.desc}</p>
+            <div class="guest-card-badges">
+              <span class="badge-pill highlight">${flavor.badge}</span>
+              <span class="badge-pill">${flavor.type}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /* ==========================================================================
+       INITIALIZATION
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderKDSCards();
+      updateKPICounters();
+      populateTimerSelector();
+      updateTimerDisplay();
+      renderShoppingList();
+      renderGuestMenu();
+    });
+  </script>
+</body>
+</html>
