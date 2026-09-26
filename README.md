@@ -28,30 +28,32 @@ Como o projeto é **Single-File (`index.html`) com assets locais**, ele pode ser
 ## 🧭 Os 5 Módulos da Festa
 
 1. **👨‍🍳 Controle de Fornadas (Pizzas):**
-   - Receita e montagem das **13 pizzas**.
-   - Quantidades calculadas para massa de 35 cm (molho ~85g, mussarela ~270g, recheios ~170g).
-   - Alerta especial de destaque para o amigo com **Intolerância a Lactose** (Pizza nº 3 — Calabresa sem queijo).
+   - Receita e montagem das **13 pizzas** com quantidades balanceadas ao orçamento (R$ 398,50).
+   - Proporção calibrada: ~180g de mussarela por pizza salgada (1,8 kg total no atacado).
+   - 4 Queijos adaptada com ingredientes acessíveis e saborosos: Mussarela + Requeijão Culinário + Cheddar Cremoso + Parmesão.
+   - Alerta especial de destaque para o convidado com **Intolerância a Lactose** (Pizza nº 3 — Calabresa sem queijo e assada sobre folha de papel alumínio para evitar contaminação cruzada).
    - Destaque para ingredientes colocados **após o forno** (Rúcula com Tomate Seco, Margherita e Sensação com Morangos).
-   - Controle de status com memória local: `Na Fila` ➔ `No Forno` ➔ `Servida`.
-   - Botão rápido "🔥 Colocar no Forno (Timer)".
+   - Controle de status: `Na Fila` ➔ `No Forno` ➔ `Servida`.
+   - **⏱️ Timer individual no próprio card**: Cada pizza que entra no forno ganha seu cronômetro com botão de pausa, +1 min e finalização.
 
-2. **⏱️ Timer do Forno:**
-   - Display digital circular com contagem regressiva de 8 min (presets de 7, 8 e 9 min).
-   - Alarme sonoro integrado no próprio navegador (funciona 100% offline).
-   - Alerta sonoro e visual aos 5 minutos para acionar o **Gratinador (resistência superior)** para dourar o queijo.
-   - Vibração de aviso no celular.
+2. **⏱️ Forno & Timers Independentes (Multi-Pizzas):**
+   - **Timers Concorrentes e Independentes**: As pizzas podem entrar em momentos diferentes no forno sem que uma interfira no tempo da outra.
+   - Motor imune a travamento no celular: cálculo baseado em `Date.now() - startedAt`, mantendo a precisão mesmo se a tela desligar ou a aba mudar.
+   - Alerta sonoro e visual aos 5 minutos (3 minutos restantes) para acionar o **Gratinador (resistência superior)** para dourar o queijo.
+   - Seletor de pizza rápida para envio direto ao forno.
 
-3. **🛒 Lista de Compras no Mercado:**
-   - 38 itens organizados pelos corredores reais do supermercado:
-     - 🧀 Frios e Laticínios
-     - 🥩 Carnes & Aves
-     - 🥦 Hortifruti
-     - 🥫 Mercearia & Empório
-     - 🍬 Doces & Confeitaria
-     - 🥤 Bebidas & Gelo (10 Litros de refrigerante para 15 pessoas com folga)
-     - 🍴 Descartáveis & Apoio
-   - Barra de progresso dinâmica com percentual de itens já colocados no carrinho.
-   - Marcações salvas no aparelho (pode fechar e abrir que continua marcado).
+3. **🛒 Lista de Compras & Orçamento Real (R$ 398,50 cravados):**
+   - 27 itens essenciais precificados para compra no Fort Atacadista / Cooper Atacarejo:
+     - 🧀 Frios & Laticínios: R$ 127,30 (1,8 kg Mussarela a R$ 46/kg, Requeijão 1kg, Cheddar, Presunto, Parmesão)
+     - 🥩 Carnes & Aves: R$ 31,50 (Calabresa 600g, Peito de Frango 600g, Bacon 200g)
+     - 🥫 Mercearia & Empório: R$ 19,10 (Molho de tomate 3x, Azeitona, 6 Ovos, Ervilha)
+     - 🥦 Hortifruti: R$ 33,00 (Tomate seco, Morangos, Rúcula, Manjericão, Tomates, Cebolas, Bananas)
+     - 🍬 Doces & Coberturas: R$ 23,00 (Doce de leite 400g, Chocolate meio amargo, Chocolate branco)
+     - 🥤 Bebidas & Gelo: R$ 45,00 (8 Litros de refrigerante + 5 kg de Gelo filtrado)
+     - 🍴 Descartáveis & Apoio: R$ 16,00 (Copos 300ml, Guardanapos, Rolo de Papel Alumínio protetor)
+   - Discos de massa pré-assados (13 unidades compradas): R$ 104,00
+   - **Total Geral da Festa: R$ 398,50** (Margem residual de R$ 1,50 dentro do teto de R$ 400,00).
+   - Checkbox interativo com barra de progresso em tempo real e persistência local.
 
 4. **🔥 Dicas & Segredos do Forno:**
    - Dicas práticas para assar perfeito em forno elétrico convencional.

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0b0d11">
-  <meta name="description" content="Sistema Operacional Gastronômico da Festa de 18 Anos da Bia - Pizzaria Artesanal">
+  <meta name="description" content="Sistema da Festa de 18 Anos da Bia — Fornadas, Timers Independentes e Lista de Compras">
   <title>Pizzaria da Bia — 18 Anos 🍕</title>
   
   <!-- Favicon Emoji -->
@@ -322,7 +322,7 @@
       gap: 18px;
     }
 
-    /* Pizza KDS Card */
+    /* Pizza Card */
     .pizza-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -344,7 +344,7 @@
     }
     .pizza-card.status-done {
       border-color: var(--green);
-      opacity: 0.85;
+      opacity: 0.88;
     }
     .pizza-card.zero-lactose {
       border: 2px solid #ef4444;
@@ -423,7 +423,7 @@
       line-height: 1.4;
     }
 
-    /* Poka-Yoke Banner in Card */
+    /* Banners */
     .poka-yoke-banner {
       background: rgba(239, 68, 68, 0.12);
       border: 1px solid rgba(239, 68, 68, 0.4);
@@ -450,7 +450,6 @@
       gap: 8px;
     }
 
-    /* Ingredients List Details */
     .ingredients-box {
       background: var(--bg-surface-elevated);
       border: 1px solid var(--border-subtle);
@@ -472,6 +471,95 @@
     }
     .ingredients-items strong {
       color: var(--text-main);
+    }
+
+    /* IN-CARD LIVE TIMER WIDGET */
+    .card-timer-widget {
+      background: rgba(11, 13, 18, 0.9);
+      border: 1.5px solid var(--amber);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--amber-glow);
+    }
+    .card-timer-widget.gratinar-active {
+      border-color: var(--red);
+      animation: alertPulseBorder 1.2s infinite;
+    }
+    @keyframes alertPulseBorder {
+      0%, 100% { border-color: var(--red); box-shadow: 0 0 10px rgba(239,68,68,0.4); }
+      50% { border-color: #f97316; box-shadow: 0 0 20px rgba(239,68,68,0.8); }
+    }
+    .card-timer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-timer-digits {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .card-timer-state-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      background: var(--amber-glow);
+      color: var(--amber-light);
+    }
+    .card-timer-state-pill.gratinar {
+      background: var(--red-glow);
+      color: #fca5a5;
+    }
+    .card-timer-progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .card-timer-progress-bar {
+      height: 100%;
+      background: var(--amber);
+      border-radius: var(--radius-full);
+      transition: width 1s linear;
+    }
+    .card-timer-progress-bar.gratinar {
+      background: linear-gradient(90deg, #f97316, var(--red));
+    }
+    .card-timer-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .btn-timer-sub {
+      flex: 1;
+      min-height: 40px;
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background var(--transition-fast);
+    }
+    .btn-timer-sub:hover {
+      background: var(--bg-surface-active);
+    }
+    .btn-timer-sub.finish {
+      background: var(--green);
+      color: #0b0d11;
+      border-color: var(--green);
     }
 
     /* Card Status Buttons Bar */
@@ -543,279 +631,273 @@
     }
 
     /* ==========================================================================
-       MODULE 2: FORNO & CRONÔMETRO
+       MODULE 2: FORNO & TIMERS INDEPENDENTES (MULTI-SLOT)
        ========================================================================== */
-    .timer-container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 24px;
+    .oven-panel-container {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      box-shadow: var(--shadow-md);
-      position: relative;
-      overflow: hidden;
+      gap: 20px;
     }
-    .timer-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
-    }
-
-    .timer-pizza-selector {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    .timer-pizza-select {
-      width: 100%;
-      min-height: 48px;
-      background: var(--bg-surface-elevated);
-      color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 0 16px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      outline: none;
-      cursor: pointer;
-    }
-    .timer-pizza-select:focus {
-      border-color: var(--amber);
-    }
-
-    /* Circular SVG Timer */
-    .timer-display-wrap {
-      position: relative;
-      width: 260px;
-      height: 260px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0 20px;
-    }
-    .timer-svg {
-      transform: rotate(-90deg);
-      width: 100%;
-      height: 100%;
-    }
-    .timer-circle-bg {
-      fill: none;
-      stroke: var(--bg-surface-elevated);
-      stroke-width: 12;
-    }
-    .timer-circle-progress {
-      fill: none;
-      stroke: var(--amber);
-      stroke-width: 12;
-      stroke-linecap: round;
-      stroke-dasharray: 691;
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
-    }
-    .timer-circle-progress.gratinar-mode {
-      stroke: var(--red);
-      animation: pulseStroke 1.2s infinite;
-    }
-    @keyframes pulseStroke {
-      0%, 100% { stroke: var(--red); }
-      50% { stroke: #f97316; }
-    }
-
-    .timer-inner-content {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-    .timer-digits {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 3.4rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      color: var(--text-main);
-      line-height: 1;
-    }
-    .timer-substate {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--amber);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 6px;
-    }
-    .timer-temperature-pill {
-      background: var(--bg-surface-active);
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: var(--radius-full);
-      margin-top: 8px;
-      font-weight: 600;
-    }
-
-    /* Broil / Gratinar Warning Banner */
-    .gratinar-alert-banner {
-      width: 100%;
-      background: rgba(239, 68, 68, 0.15);
-      border: 2px solid var(--red);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      display: none;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      animation: alertPulse 1.5s infinite;
-    }
-    .gratinar-alert-banner.active {
-      display: flex;
-    }
-    @keyframes alertPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(239,68,68,0.3); }
-      50% { transform: scale(1.02); box-shadow: 0 0 25px rgba(239,68,68,0.7); }
-    }
-    .gratinar-alert-text strong {
-      color: #fca5a5;
-      font-size: 0.95rem;
-      display: block;
-    }
-    .gratinar-alert-text span {
-      font-size: 0.82rem;
-      color: #fed7d7;
-    }
-
-    /* Timer Controls */
-    .timer-controls {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      margin-bottom: 16px;
-    }
-    .btn-timer-primary {
-      flex: 2;
-      min-height: 52px;
-      background: var(--amber);
-      color: #0b0d11;
-      border: none;
-      border-radius: var(--radius-md);
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 14px var(--amber-glow);
-      transition: all var(--transition-fast);
-    }
-    .btn-timer-primary:hover {
-      filter: brightness(1.1);
-    }
-    .btn-timer-primary.btn-pause {
-      background: #f97316;
-    }
-    .btn-timer-secondary {
-      flex: 1;
-      min-height: 52px;
-      background: var(--bg-surface-elevated);
-      color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-    .btn-timer-secondary:hover {
-      background: var(--bg-surface-active);
-    }
-
-    .preset-btns {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-      justify-content: center;
-    }
-    .preset-btn {
-      background: var(--bg-surface-elevated);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      min-height: 48px;
-      flex: 1;
-    }
-    .preset-btn:hover, .preset-btn.active {
-      color: var(--amber);
-      border-color: var(--amber);
-    }
-
-    /* ==========================================================================
-       MODULE 3: LISTA DE COMPRAS (MERCADO)
-       ========================================================================== */
-    .shopping-summary-card {
-      background: linear-gradient(135deg, #182032, #101624);
+    
+    .oven-overview-card {
+      background: linear-gradient(135deg, #161c2b, #101420);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      margin-bottom: 20px;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
     }
-    .progress-bar-wrap {
-      flex: 1;
-      min-width: 200px;
+    .oven-overview-text h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
-    .progress-header {
+    .oven-overview-text p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .active-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .slot-card {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .slot-card.gratinar-mode {
+      border-color: var(--red);
+      animation: alertPulseBorder 1.2s infinite;
+    }
+    .slot-card-top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .slot-pizza-thumb {
+      width: 70px;
+      height: 70px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .slot-pizza-info {
+      flex: 1;
+    }
+    .slot-pizza-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+    .slot-status-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+    }
+    .slot-status-pill.baking { background: var(--amber-glow); color: var(--amber-light); }
+    .slot-status-pill.gratinar { background: var(--red-glow); color: #fca5a5; }
+    .slot-status-pill.paused { background: rgba(100, 116, 139, 0.3); color: #cbd5e1; }
+
+    .slot-timer-display {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 6px;
+      align-items: flex-end;
+      margin-top: 4px;
     }
-    .progress-track {
+    .slot-timer-digits {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .slot-timer-target {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .slot-progress-track {
       width: 100%;
       height: 10px;
       background: var(--bg-dark);
       border-radius: var(--radius-full);
       overflow: hidden;
     }
-    .progress-fill {
+    .slot-progress-fill {
+      height: 100%;
+      background: var(--amber);
+      border-radius: var(--radius-full);
+      transition: width 1s linear;
+    }
+    .slot-progress-fill.gratinar {
+      background: linear-gradient(90deg, #f97316, var(--red));
+    }
+
+    .slot-alert-box {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--red);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      color: #fed7d7;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .slot-alert-box.active {
+      display: flex;
+    }
+
+    .slot-actions-row {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-slot-action {
+      flex: 1;
+      min-height: 48px;
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+    }
+    .btn-slot-action:hover {
+      background: var(--bg-surface-active);
+    }
+    .btn-slot-action.finish {
+      background: var(--green);
+      color: #0b0d11;
+      border-color: var(--green);
+      flex: 1.3;
+    }
+
+    .empty-oven-state {
+      background: var(--bg-surface);
+      border: 2px dashed var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .empty-oven-icon {
+      font-size: 48px;
+    }
+    .empty-oven-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .empty-oven-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 440px;
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       MODULE 3: LISTA DE COMPRAS (ORÇAMENTO R$ 398,50)
+       ========================================================================== */
+    .budget-banner-card {
+      background: linear-gradient(135deg, #182338, #101626);
+      border: 1.5px solid var(--amber);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 4px 18px var(--amber-glow);
+    }
+    .budget-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .budget-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--amber-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .budget-pills-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .budget-pill {
+      background: rgba(11, 13, 18, 0.6);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+    }
+    .budget-pill strong {
+      color: var(--text-main);
+    }
+    .budget-pill.highlight {
+      border-color: var(--green);
+      color: #6ee7b7;
+    }
+
+    .shopping-progress-bar-wrap {
+      width: 100%;
+    }
+    .shopping-progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+    .shopping-progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-dark);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .shopping-progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--amber), var(--green));
       border-radius: var(--radius-full);
       width: 0%;
       transition: width 0.4s ease;
-    }
-
-    .btn-reset-shopping {
-      background: var(--bg-surface);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      padding: 10px 16px;
-      border-radius: var(--radius-md);
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      min-height: 48px;
-    }
-    .btn-reset-shopping:hover {
-      color: var(--red);
-      border-color: var(--red);
     }
 
     .aisle-card {
@@ -841,13 +923,13 @@
       align-items: center;
       gap: 10px;
     }
-    .aisle-count {
-      font-size: 0.78rem;
-      background: var(--bg-dark);
-      color: var(--text-muted);
-      padding: 3px 10px;
+    .aisle-total-price {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--amber);
+      background: rgba(245, 158, 11, 0.12);
+      padding: 4px 10px;
       border-radius: var(--radius-full);
-      font-weight: 600;
     }
 
     .shopping-items-list {
@@ -911,12 +993,13 @@
       text-decoration: line-through;
       color: var(--text-dim);
     }
-    .shopping-qty {
+    .shopping-price-tag {
       font-weight: 800;
-      color: var(--amber);
+      color: var(--amber-light);
       white-space: nowrap;
+      font-size: 0.9rem;
     }
-    .shopping-item.checked .shopping-qty {
+    .shopping-item.checked .shopping-price-tag {
       color: var(--text-dim);
     }
     .shopping-dest {
@@ -926,7 +1009,7 @@
     }
 
     /* ==========================================================================
-       MODULE 4: GUIA TÉCNICO & POP DE FORNO
+       MODULE 4: DICAS & SEGREDOS DO FORNO
        ========================================================================== */
     .pop-card {
       background: var(--bg-surface);
@@ -1094,7 +1177,7 @@
       border-color: var(--amber);
     }
 
-    /* Modal for Pizza Details */
+    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -1166,7 +1249,7 @@
 
     /* Responsive adjustments */
     @media (max-width: 640px) {
-      .pizza-grid {
+      .pizza-grid, .active-slots-grid {
         grid-template-columns: 1fr;
       }
       .brand-title {
@@ -1174,13 +1257,6 @@
       }
       .kpi-mini-pill {
         display: none;
-      }
-      .timer-digits {
-        font-size: 2.8rem;
-      }
-      .timer-display-wrap {
-        width: 220px;
-        height: 220px;
       }
     }
   </style>
@@ -1222,7 +1298,7 @@
       <div class="section-title-wrap">
         <div>
           <h2 class="section-heading">Controle de Fornadas 👨‍🍳</h2>
-          <p class="section-desc">Cardápio das 13 pizzas com receita, ordem das camadas e controle de fornadas.</p>
+          <p class="section-desc">Cardápio das 13 pizzas com receita, ordem das camadas e timers independentes.</p>
         </div>
       </div>
 
@@ -1244,95 +1320,78 @@
 
 
     <!-- ======================================================================
-         TAB 2: TIMER DE FORNO INTELIGENTE
+         TAB 2: FORNO & TIMERS INDEPENDENTES (MULTI-SLOT)
          ====================================================================== -->
     <section id="tab-timer" class="tab-pane">
       <div class="section-title-wrap">
         <div>
-          <h2 class="section-heading">Timer do Forno ⏱️</h2>
-          <p class="section-desc">Forno bem quente (250°C): 5 min para derreter o queijo + 3 min no Gratinador para dourar.</p>
+          <h2 class="section-heading">Fornadas no Forno ⏱️</h2>
+          <p class="section-desc">Timers independentes para cada pizza no forno com aviso do Gratinador aos 5 min.</p>
         </div>
       </div>
 
-      <div class="timer-container">
-        <!-- Pizza Selector inside Timer -->
-        <div class="timer-pizza-selector">
-          <label for="timer-select-pizza" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; margin-bottom: 6px; display: block;">
-            Pizza Atual no Forno:
-          </label>
-          <select id="timer-select-pizza" class="timer-pizza-select" aria-label="Selecionar Pizza Atual no Forno" onchange="onTimerSelectPizzaChange()">
-            <!-- Populated dynamically -->
-          </select>
-        </div>
-
-        <!-- Alert Banner when Gratinar Triggered -->
-        <div id="gratinar-alert" class="gratinar-alert-banner">
-          <span style="font-size: 28px;">🔥</span>
-          <div class="gratinar-alert-text">
-            <strong>MOMENTO DO GRATINADOR ATIVADO!</strong>
-            <span>Ligue a função Gratinar/Broil (resistência superior) para dourar e borbulhar o queijo!</span>
+      <div class="oven-panel-container">
+        <!-- Overview summary banner -->
+        <div class="oven-overview-card">
+          <div class="oven-overview-text">
+            <h3>Forno Elétrico a 250°C</h3>
+            <p>Monitore cada pizza individualmente. Cada fornada tem sua própria contagem de choque térmico.</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-slot-action" onclick="switchTab('kds')">
+              <span>+ Adicionar Pizza da Fila</span>
+            </button>
           </div>
         </div>
 
-        <!-- Circular Display -->
-        <div class="timer-display-wrap">
-          <svg class="timer-svg" viewBox="0 0 240 240">
-            <circle class="timer-circle-bg" cx="120" cy="120" r="110" />
-            <circle id="timer-progress" class="timer-circle-progress" cx="120" cy="120" r="110" />
-          </svg>
-          <div class="timer-inner-content">
-            <div id="timer-time" class="timer-digits">08:00</div>
-            <div id="timer-phase" class="timer-substate">Aguardando</div>
-            <div class="timer-temperature-pill">Forno 250°C</div>
-          </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="timer-controls">
-          <button id="btn-timer-toggle" class="btn-timer-primary" onclick="toggleTimer()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span id="btn-timer-text">Iniciar Timer</span>
-          </button>
-          <button class="btn-timer-secondary" onclick="resetTimer()">
-            Reiniciar
-          </button>
-        </div>
-
-        <!-- Quick Presets -->
-        <div class="preset-btns">
-          <button class="preset-btn" onclick="setTimerDuration(420)">7 min (Rápido)</button>
-          <button class="preset-btn active" onclick="setTimerDuration(480)">8 min (Padrão)</button>
-          <button class="preset-btn" onclick="setTimerDuration(540)">9 min (Bem Dourada)</button>
+        <!-- Dynamic Active Pizza Slots Container -->
+        <div id="oven-active-slots" class="active-slots-grid">
+          <!-- Injected dynamically by Timer Engine -->
         </div>
       </div>
     </section>
 
 
     <!-- ======================================================================
-         TAB 3: LISTA DE COMPRAS INTERATIVA
+         TAB 3: LISTA DE COMPRAS INTERATIVA (ORÇAMENTO R$ 398,50)
          ====================================================================== -->
     <section id="tab-shopping" class="tab-pane">
       <div class="section-title-wrap">
         <div>
           <h2 class="section-heading">Lista de Compras no Mercado 🛒</h2>
-          <p class="section-desc">Organizada por corredor para comprar rápido no mercado sem esquecer nada.</p>
+          <p class="section-desc">Rateio fechado em R$ 294,50 (Total da festa: R$ 398,50 cravado nos R$ 400).</p>
         </div>
       </div>
 
-      <!-- Shopping Progress Card -->
-      <div class="shopping-summary-card">
-        <div class="progress-bar-wrap">
-          <div class="progress-header">
-            <span>Progresso no Carrinho</span>
-            <span id="shopping-progress-text">0 de 0 itens (0%)</span>
+      <!-- Budget & Progress Card -->
+      <div class="budget-banner-card">
+        <div class="budget-top-row">
+          <div class="budget-title">
+            <span>💰</span>
+            <span>Balanço Financeiro da Festa</span>
           </div>
-          <div class="progress-track">
-            <div id="shopping-progress-fill" class="progress-fill"></div>
+          <div class="budget-pills-row">
+            <div class="budget-pill">Massas (13 un): <strong>R$ 104,00</strong></div>
+            <div class="budget-pill">Mercado: <strong>R$ 294,50</strong></div>
+            <div class="budget-pill highlight">Total: <strong>R$ 398,50 / R$ 400</strong></div>
           </div>
         </div>
-        <button class="btn-reset-shopping" onclick="resetShoppingList()">
-          Desmarcar Todos
-        </button>
+        
+        <div class="shopping-progress-bar-wrap">
+          <div class="shopping-progress-header">
+            <span>Progresso no Carrinho</span>
+            <span id="shopping-progress-text">0 de 24 itens (0%)</span>
+          </div>
+          <div class="shopping-progress-track">
+            <div id="shopping-progress-fill" class="shopping-progress-fill"></div>
+          </div>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="btn-timer-sub" style="max-width: 180px;" onclick="resetShoppingList()">
+            Desmarcar Todos
+          </button>
+        </div>
       </div>
 
       <!-- Aisle Containers -->
@@ -1358,7 +1417,7 @@
         <span style="font-size: 32px;">🚫</span>
         <div>
           <strong style="color: #fca5a5; font-size: 1rem; display: block; margin-bottom: 4px;">⚠️ ALERTA IMPORTANTE: AMIGO COM INTOLERÂNCIA A LACTOSE</strong>
-          A <strong>Pizza nº 3 (Calabresa Marinara)</strong> NÃO leva nenhum queijo. Ela DEVE ser assada sobre folha de papel manteiga/alumínio nova ou antes das outras pizzas para queijo derretido de fornadas anteriores não encostar na massa. Segurança total para o amigo!
+          A <strong>Pizza nº 3 (Calabresa Marinara)</strong> NÃO leva nenhum queijo. Ela DEVE ser assada sobre folha de papel alumínio nova (já orçada na lista de descartáveis!) ou antes das outras pizzas para queijo residual de fornadas anteriores não encostar na massa. Segurança 100%!
         </div>
       </div>
 
@@ -1384,7 +1443,7 @@
             <div class="pop-step-num">3</div>
             <div class="pop-step-content">
               <strong>Segredo das Camadas (Sem encharcar a massa)</strong>
-              <p>1º Pouco molho espalhado (~85g) ➔ 2º Mussarela selando a massa (~270g) ➔ 3º Recheios ➔ 4º Cebolas e temperos finos por cima para dourarem direto no calor ➔ 5º Orégano.</p>
+              <p>1º Pouco molho espalhado (~85g) ➔ 2º Mussarela selando a massa (~180g ralada grosso) ➔ 3º Recheios ➔ 4º Cebolas e temperos finos por cima para dourarem direto no calor ➔ 5º Orégano.</p>
             </div>
           </div>
           <div class="pop-step-item">
@@ -1471,6 +1530,7 @@
     <button class="nav-btn" onclick="switchTab('timer', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span>Forno</span>
+      <span id="nav-oven-badge" class="nav-badge" style="display: none; background: var(--amber); color: #000;">0</span>
     </button>
     <button class="nav-btn" onclick="switchTab('shopping', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -1489,7 +1549,7 @@
   <!-- Application Logic -->
   <script>
     /* ==========================================================================
-       DATA: 13 PIZZAS CONSOLIDADAS
+       DATA: 13 PIZZAS CONSOLIDADAS (QUANTIDADES ENXUTAS / R$ 398,50)
        ========================================================================== */
     const PIZZAS_DATA = [
       {
@@ -1498,19 +1558,19 @@
         shortName: "Calabresa Acebolada #1",
         category: "salgada",
         image: "assets/images/calabresa_acebolada.jpg",
-        desc: "Clássica e campeã de pedidos. Molho artesanal, mussarela, calabresa fatiada fina, cebolas caramelizadas no forno e orégano.",
+        desc: "Clássica e campeã de pedidos. Molho artesanal, mussarela ralada, fatias finas de calabresa defumada, cebolas caramelizadas e orégano.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate temperado",
-        cheese: "270g mussarela ralada/fatiada",
-        toppings: "170g linguiça calabresa defumada fatiada fina + bastante cebola em rodelas finas + requeijão em fios + orégano",
+        cheese: "180g mussarela ralada grosso",
+        toppings: "200g linguiça calabresa fatiada fininha + rodelas finas de cebola + fios de requeijão + orégano",
         assembly: [
           "Pincelar leve fio de azeite nas bordas da massa pré-assada",
           "Espalhar 85g de molho de tomate em movimentos circulares",
-          "Distribuir 270g de mussarela selando toda a área útil",
-          "Espalhar as fatias finas de calabresa e fios de requeijão",
-          "Cobrir com as rodelas de cebola (para dourarem diretamente no calor)",
-          "Finalizar com orégano e levar ao forno a 250°C"
+          "Distribuir 180g de mussarela ralada cobrindo a base",
+          "Espalhar a calabresa fatiada fininha e fios de requeijão",
+          "Cobrir com rodelas finas de cebola (para dourarem diretamente)",
+          "Finalizar com orégano e colocar no forno a 250°C"
         ]
       },
       {
@@ -1519,16 +1579,16 @@
         shortName: "Calabresa Acebolada #2",
         category: "salgada",
         image: "assets/images/calabresa_acebolada.jpg",
-        desc: "Segunda unidade da campeã de pedidos para garantir o fluxo contínuo dos convidados.",
+        desc: "Segunda unidade da campeã para garantir o fluxo contínuo dos convidados.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "170g linguiça calabresa + cebolas + requeijão cremoso + orégano",
+        cheese: "180g mussarela ralada",
+        toppings: "200g calabresa fatiada fina + cebola + fios de requeijão + orégano",
         assembly: [
           "Pincelar bordas com azeite",
           "85g de molho espalhado uniforme",
-          "270g de mussarela",
+          "180g de mussarela ralada",
           "Calabresa fininha + requeijão cremoso",
           "Cebola fatiada fina por cima de tudo",
           "Orégano seco"
@@ -1540,14 +1600,14 @@
         shortName: "🚫 Zero Lactose (Calabresa)",
         category: "zero-lactose",
         image: "assets/images/calabresa_zero_lactose.jpg",
-        desc: "TOTALMENTE SEM QUEIJO. Molho artesanal temperado com alho dourado e azeite extravirgem, farta calabresa defumada, cebolas, azeitonas pretas e orégano.",
+        desc: "TOTALMENTE SEM QUEIJO. Molho artesanal temperado com alho e azeite extravirgem, farta calabresa defumada, cebolas, azeitonas pretas e orégano.",
         isZeroLactose: true,
         coldTopping: null,
         sauce: "100g molho de tomate encorpado c/ azeite e alho",
         cheese: "🚫 ZERO QUEIJO (NENHUM TRAÇO DE LACTOSE)",
-        toppings: "200g calabresa defumada fatiada + cebolas finas + azeitonas pretas fatiadas + orégano",
+        toppings: "200g calabresa defumada fatiada + cebolas finas + azeitonas pretas + orégano",
         assembly: [
-          "⚠️ ATENÇÃO ZERO LACTOSE: Forrar assadeira com papel manteiga/alumínio limpo!",
+          "⚠️ ATENÇÃO ZERO LACTOSE: Forrar assadeira com folha nova de papel alumínio!",
           "Pincelar bordas com azeite extravirgem",
           "Espalhar 100g de molho temperado",
           "Cobrir fartamente com fatias de calabresa defumada",
@@ -1558,39 +1618,39 @@
       {
         id: 4,
         name: "Frango com Catupiry #1",
-        shortName: "Frango c/ Catupiry #1",
+        shortName: "Frango c/ Requeijão #1",
         category: "salgada",
         image: "assets/images/frango_catupiry.jpg",
-        desc: "Frango desfiado temperado com páprica e ervas finas, mussarela derretida e espirais generosas de requeijão cremoso.",
+        desc: "Frango desfiado temperado com páprica e ervas, mussarela derretida e espirais generosas de requeijão cremoso.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "180g peito de frango cozido e desfiado temperado + requeijão em espiral + orégano",
+        cheese: "180g mussarela ralada",
+        toppings: "140g peito de frango desfiado temperado + requeijão em espiral + orégano",
         assembly: [
           "Pincelar bordas com azeite",
           "Espalhar 85g de molho",
-          "Adicionar 270g de mussarela",
-          "Distribuir o frango desfiado uniformemente",
-          "Aplicar requeijão cremoso em espiral da borda ao centro",
+          "Adicionar 180g de mussarela ralada",
+          "Distribuir o frango desfiado temperado",
+          "Aplicar requeijão cremoso da bisnaga em espiral",
           "Salpicar orégano"
         ]
       },
       {
         id: 5,
         name: "Frango com Catupiry #2",
-        shortName: "Frango c/ Catupiry #2",
+        shortName: "Frango c/ Requeijão #2",
         category: "salgada",
         image: "assets/images/frango_catupiry.jpg",
-        desc: "Segunda unidade do clássico suculento preferido dos adolescentes.",
+        desc: "Segunda unidade do clássico suculento preferido da turma jovem.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "180g frango desfiado + requeijão cremoso em espiral + orégano",
+        cheese: "180g mussarela ralada",
+        toppings: "140g frango desfiado + requeijão em espiral + orégano",
         assembly: [
           "Pincelar bordas com azeite",
-          "Molho de tomate + mussarela selante",
+          "Molho de tomate + 180g mussarela",
           "Frango desfiado temperado",
           "Requeijão em espiral generosa",
           "Orégano e forno 250°C"
@@ -1599,19 +1659,19 @@
       {
         id: 6,
         name: "Frango com Catupiry #3",
-        shortName: "Frango c/ Catupiry #3",
+        shortName: "Frango c/ Requeijão #3",
         category: "salgada",
         image: "assets/images/frango_catupiry.jpg",
         desc: "Terceira unidade garantindo alto rendimento e satisfação unânime.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "180g frango desfiado + requeijão cremoso + orégano",
+        cheese: "180g mussarela ralada",
+        toppings: "140g frango desfiado + requeijão cremoso + orégano",
         assembly: [
           "Pincelar bordas com azeite",
-          "Molho + mussarela",
-          "Frango desfiado + requeijão cremoso",
+          "Molho + mussarela ralada",
+          "Frango desfiado + requeijão",
           "Orégano"
         ]
       },
@@ -1621,21 +1681,21 @@
         shortName: "Rúcula c/ Tomate Seco",
         category: "salgada",
         image: "assets/images/rucula_tomate_seco.jpg",
-        desc: "Sofisticação e frescor. Base assada de mussarela e molho, finalizada PÓS-FORNO com folhas frescas de rúcula, tomate seco nobre e fio de azeite.",
+        desc: "Sofisticação e frescor. Base assada de mussarela e molho, finalizada PÓS-FORNO com folhas frescas de rúcula, tomate seco e azeite.",
         isZeroLactose: false,
-        coldTopping: "🌿 RÚCULA + TOMATE SECO APLICADOS PÓS-FORNO (A FRIO)",
+        coldTopping: "🌿 RÚCULA + TOMATE SECO COLOCADOS PÓS-FORNO (A FRIO)",
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "100g tomate seco em conserva + 1 maço de rúcula fresca lavada + azeite extravirgem",
+        cheese: "180g mussarela ralada",
+        toppings: "100g tomate seco em conserva + 1 maço de rúcula fresca lavada + azeite",
         assembly: [
           "Pincelar bordas com azeite",
           "Espalhar 85g de molho de tomate",
-          "Cobrir com 270g de mussarela",
+          "Cobrir com 180g de mussarela ralada",
           "LEVAR AO FORNO APENAS COM MOLHO E QUEIJO até dourar bolhas (7 a 8 min)",
           "⚠️ RETIRAR DO FORNO E IMEDIATAMENTE:",
           "Distribuir o tomate seco fatiado",
           "Cobrir com as folhas frescas de rúcula",
-          "Finalizar com fio generoso de azeite extravirgem"
+          "Finalizar com fio de azeite extravirgem"
         ]
       },
       {
@@ -1644,40 +1704,40 @@
         shortName: "Bacon Supreme Cheddar",
         category: "salgada",
         image: "assets/images/bacon_supreme.jpg",
-        desc: "Hit absoluto da galera jovem. Cubos crocantes de bacon tostado, cheddar cremoso, mussarela derretida e cebolinha verde fresca.",
+        desc: "Hit absoluto da galera. Cubos de bacon tostados na frigideira, cheddar cremoso, mussarela derretida e toque de orégano.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "180g bacon em cubos (pré-tostado) + cheddar cremoso em fios + cebolinha verde picadinha",
+        cheese: "180g mussarela ralada",
+        toppings: "200g bacon em cubos (pré-tostado) + cheddar cremoso em fios",
         assembly: [
           "Pincelar bordas com azeite",
           "85g molho de tomate",
-          "270g mussarela",
+          "180g mussarela ralada",
           "Espalhar bacon crocante pré-tostado",
-          "Fios de cheddar cremoso",
-          "Salpicar cebolinha verde fresca antes de servir"
+          "Fios generosos de cheddar cremoso",
+          "Orégano e levar ao forno"
         ]
       },
       {
         id: 9,
-        name: "Quatro Queijos Econômica",
+        name: "Quatro Queijos Selecionados",
         shortName: "Quatro Queijos",
         category: "salgada",
         image: "assets/images/quatro_queijos.jpg",
-        desc: "Equilíbrio gourmet e aromático. Combinação de mussarela, provolone defumado gratinado, requeijão culinário e toques picantes de gorgonzola.",
+        desc: "Blend saboroso e sem desperdício: base de mussarela, requeijão cremoso da bisnaga, cheddar e parmesão ralado fininho.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "200g mussarela + 80g provolone ralado + 80g requeijão + 40g gorgonzola esfarelado",
-        toppings: "Blend de 4 queijos + orégano",
+        cheese: "180g mussarela + requeijão em fios + cheddar cremoso + parmesão ralado",
+        toppings: "Blend cremoso de 4 queijos + orégano",
         assembly: [
           "Pincelar bordas com azeite",
           "85g molho de tomate fino",
-          "Base de 200g de mussarela",
-          "Distribuir o provolone defumado ralado",
-          "Pontos estratégicos de requeijão cremoso e gorgonzola esfarelado",
-          "Orégano e levar ao forno para fundir completamente"
+          "Base de 180g de mussarela ralada",
+          "Fios de requeijão culinário e cheddar cremoso",
+          "Polvilhar queijo parmesão ralado por cima",
+          "Orégano e levar ao forno para fundir"
         ]
       },
       {
@@ -1686,17 +1746,17 @@
         shortName: "Margherita Tradicional",
         category: "salgada",
         image: "assets/images/margherita.jpg",
-        desc: "A clássica italiana. Molho de tomate encorpado, mussarela derretida, rodelas de tomate fresco e folhas de manjericão fresco aplicadas logo na saída do forno.",
+        desc: "A clássica italiana. Molho de tomate, mussarela derretida, rodelas de tomate fresco, queijo parmesão e folhas frescas de manjericão pós-forno.",
         isZeroLactose: false,
         coldTopping: "🌿 FOLHAS DE MANJERICÃO APLICADAS PÓS-FORNO",
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela + 30g queijo parmesão ralado",
-        toppings: "Tomates maduros em rodelas finas + folhas frescas de manjericão + azeite",
+        cheese: "180g mussarela + parmesão ralado",
+        toppings: "3 tomates em rodelas finas + folhas frescas de manjericão + azeite",
         assembly: [
           "Pincelar bordas com azeite",
           "85g molho de tomate",
-          "270g mussarela",
-          "Rodelas de tomate fresco polvilhadas com queijo parmesão ralado",
+          "180g mussarela ralada",
+          "Rodelas de tomate fresco polvilhadas com queijo parmesão",
           "Assar até dourar o queijo",
           "⚠️ AO RETIRAR DO FORNO: dispor as folhas frescas de manjericão e fio de azeite"
         ]
@@ -1707,16 +1767,16 @@
         shortName: "Portuguesa Família",
         category: "salgada",
         image: "assets/images/portuguesa.jpg",
-        desc: "Sabor tradicional e farto. Presunto fatiado, mussarela, rodelas de ovos cozidos, rodelas finas de cebola, ervilhas frescas, azeitonas e orégano.",
+        desc: "Sabor tradicional. Presunto fatiado, mussarela, rodelas de ovos cozidos, cebola fininha, ervilhas, azeitonas e orégano.",
         isZeroLactose: false,
         coldTopping: null,
         sauce: "85g molho de tomate",
-        cheese: "270g mussarela",
-        toppings: "150g presunto picado + 2 ovos cozidos fatiados + cebola fina + ervilha + azeitonas pretas",
+        cheese: "180g mussarela ralada",
+        toppings: "150g presunto fatiado + 2 ovos cozidos fatiados + cebola fina + ervilha + azeitonas pretas",
         assembly: [
           "Pincelar bordas com azeite",
           "85g de molho de tomate",
-          "270g de mussarela",
+          "180g de mussarela ralada",
           "Camada de presunto fatiado",
           "Rodelas de ovos cozidos, cebola fina e ervilha",
           "Azeitonas e orégano por cima de tudo"
@@ -1728,19 +1788,18 @@
         shortName: "Sensação (Chocolate/Morango)",
         category: "doce",
         image: "assets/images/sensacao_morango.jpg",
-        desc: "Sobremesa irresistível. Ganache aveludada de chocolate meio amargo/leite aquecida levemente e coberta PÓS-FORNO com morangos frescos fatiados a frio.",
+        desc: "Sobremesa irresistível. Barra de chocolate derretida em ganache cremosa e coberta PÓS-FORNO com morangos frescos fatiados na hora.",
         isZeroLactose: false,
         coldTopping: "🍓 MORANGOS FRESCOS FATIADOS PÓS-FORNO (NUNCA ASSAR)",
-        sauce: "Base doce: 250g ganache cremosa de chocolate",
+        sauce: "Base doce: 180g chocolate derretido em ganache suave",
         cheese: "🚫 Sem queijo salgado",
-        toppings: "1 bandeja de morangos frescos fatiados a frio + raspas de chocolate",
+        toppings: "1 bandeja de morangos frescos fatiados a frio",
         assembly: [
           "Aquecer a massa de pizza pré-assada pura por 2 minutos no forno",
           "Retirar e espalhar a ganache de chocolate suavemente",
-          "Retornar ao forno por apenas 1 minuto para dar brilho à ganache",
+          "Retornar ao forno por apenas 1 minuto para dar brilho",
           "⚠️ RETIRAR DO FORNO:",
-          "Organizar as fatias de morangos frescos por toda a pizza",
-          "Finalizar com raspas de chocolate para apresentação perfeita"
+          "Organizar as fatias de morangos frescos por toda a pizza"
         ]
       },
       {
@@ -1752,130 +1811,135 @@
         desc: "Doce de leite cremoso nobre, rodelas de banana madura, perfume de canela e raspas de chocolate branco gratinado no topo.",
         isZeroLactose: false,
         coldTopping: null,
-        sauce: "Base doce: 250g de doce de leite cremoso firme",
+        sauce: "Base doce: 200g de doce de leite firme",
         cheese: "🚫 Sem queijo salgado",
-        toppings: "4 bananas maduras fatiadas + canela em pó + 80g chocolate branco ralado",
+        toppings: "4 bananas maduras fatiadas + canela em pó + barra de chocolate branco ralada",
         assembly: [
-          "Pincelar leve manteiga/óleo nas bordas",
-          "Espalhar generosamente o doce de leite como base",
+          "Pincelar leve fio de óleo/manteiga nas bordas",
+          "Espalhar generosamente o doce de leite",
           "Dispor as rodelas de banana em círculos concêntricos",
           "Polvilhar canela em pó",
           "Cobrir com raspas de chocolate branco",
-          "Levar ao forno na função GRATINAR por 2 a 3 min para fundir o chocolate branco"
+          "Levar ao forno na função GRATINAR por 2 min para derreter o chocolate branco"
         ]
       }
     ];
 
     /* ==========================================================================
-       DATA: LISTA DE COMPRAS CONSOLIDADA
+       DATA: LISTA DE COMPRAS ORÇADA (R$ 294,50 NO MERCADO / TOTAL R$ 398,50)
        ========================================================================== */
     const SHOPPING_DATA = [
       {
-        aisle: "Frios e Laticínios",
+        aisle: "Frios & Laticínios",
         icon: "🧀",
+        aisleTotal: "R$ 127,30",
         items: [
-          { id: "s1", name: "Mussarela fatiada ou peça", qty: "2,8 a 3,0 kg", dest: "10 salgadas (Zero Lactose não leva)" },
-          { id: "s2", name: "Requeijão Culinário (bisnaga firme)", qty: "1 bisnaga (1 kg)", dest: "Frango (3), Calabresa (2), 4 Queijos (1)" },
-          { id: "s3", name: "Cheddar cremoso (bisnaga ou pote)", qty: "1 un (400g)", dest: "Bacon Supreme" },
-          { id: "s4", name: "Provolone defumado", qty: "150g", dest: "4 Queijos" },
-          { id: "s5", name: "Gorgonzola", qty: "100g (1 cunha)", dest: "4 Queijos" },
-          { id: "s6", name: "Parmesão p/ ralar", qty: "50g a 100g", dest: "Margherita" },
-          { id: "s7", name: "Presunto cozido fatiado", qty: "150g a 200g", dest: "Portuguesa" },
-          { id: "s8", name: "Bacon em cubos ou manta", qty: "350g a 400g", dest: "Bacon Supreme" }
+          { id: "s1", name: "Mussarela em peça/meia-peça (ralar grosso)", qty: "1,8 kg (a R$ 46/kg)", price: "R$ 82,80", dest: "10 pizzas salgadas (~180g cada)" },
+          { id: "s2", name: "Requeijão Culinário firme (bisnaga)", qty: "1 bisnaga (1 kg)", price: "R$ 25,00", dest: "Frango (3), Calabresas (2), 4 Queijos (1)" },
+          { id: "s3", name: "Cheddar cremoso (bisnaga ou pote)", qty: "1 un (250g–400g)", price: "R$ 9,00", dest: "Bacon Supreme + 4 Queijos" },
+          { id: "s4", name: "Presunto cozido fatiado", qty: "150g", price: "R$ 5,00", dest: "Portuguesa Família" },
+          { id: "s5", name: "Parmesão ralado ou pedaço pequeno", qty: "80g", price: "R$ 5,50", dest: "Margherita + 4 Queijos" }
         ]
       },
       {
-        aisle: "Carnes & Aves",
+        aisle: "Carnes & Proteínas",
         icon: "🥩",
+        aisleTotal: "R$ 31,50",
         items: [
-          { id: "s9", name: "Linguiça Calabresa defumada", qty: "700g (4–5 gomos)", dest: "2 Aceboladas + 1 Zero Lactose" },
-          { id: "s10", name: "Peito de Frango cru", qty: "800g (rende ~560g desfiado)", dest: "3 Frango com Catupiry" }
-        ]
-      },
-      {
-        aisle: "Hortifruti",
-        icon: "🥦",
-        items: [
-          { id: "s11", name: "Cebolas médias (branca/roxa)", qty: "5 a 6 un", dest: "3 Calabresas + Portuguesa" },
-          { id: "s12", name: "Rúcula fresca", qty: "1 maço viçoso", dest: "Rúcula c/ Tomate Seco (pós-forno)" },
-          { id: "s13", name: "Tomate Seco em conserva", qty: "1 pote (100g–150g)", dest: "Rúcula c/ Tomate Seco" },
-          { id: "s14", name: "Tomates maduros", qty: "3 a 4 un", dest: "Margherita" },
-          { id: "s15", name: "Morangos frescos", qty: "1 bandeja (250g)", dest: "Sensação (pós-forno)" },
-          { id: "s16", name: "Bananas nanicas maduras", qty: "4 a 5 un", dest: "Banana Nevada" },
-          { id: "s17", name: "Manjericão fresco", qty: "1 maço", dest: "Margherita (pós-forno)" },
-          { id: "s18", name: "Cebolinha verde", qty: "1 maço pequeno", dest: "Bacon Supreme" }
+          { id: "s6", name: "Linguiça Calabresa defumada", qty: "600g (3 a 4 gomos)", price: "R$ 13,00", dest: "2 Aceboladas + 1 Zero Lactose" },
+          { id: "s7", name: "Peito de Frango cru filé", qty: "600g (a R$ 18/kg)", price: "R$ 11,00", dest: "3 Frango com Catupiry (cozinhar e desfiar)" },
+          { id: "s8", name: "Bacon em manta ou cubos", qty: "200g a 250g", price: "R$ 7,50", dest: "Bacon Supreme (tostar antes)" }
         ]
       },
       {
         aisle: "Mercearia & Empório",
         icon: "🥫",
+        aisleTotal: "R$ 19,10",
         items: [
-          { id: "s19", name: "Massas de pizza pré-assadas (35cm)", qty: "13 discos", dest: "Base de todas as pizzas" },
-          { id: "s20", name: "Molho de tomate (passata/sachê)", qty: "3 sachês (340g cada)", dest: "Base de 11 salgadas (~1 kg)" },
-          { id: "s21", name: "Azeitonas pretas fatiadas s/ caroço", qty: "1 pote (150g)", dest: "Zero Lactose + Portuguesa" },
-          { id: "s22", name: "Ervilha em conserva", qty: "1 lata pequena", dest: "Portuguesa" },
-          { id: "s23", name: "Orégano seco", qty: "1 saquinho", dest: "Todas as salgadas" },
-          { id: "s24", name: "Azeite de Oliva Extra Virgem", qty: "1 garrafa", dest: "Bordas, marinara, rúcula" },
-          { id: "s25", name: "Ovos", qty: "3 un", dest: "Portuguesa (cozinhar 2)" }
+          { id: "s9", name: "Molho de tomate tradicional (sachês)", qty: "3 sachês de 340g", price: "R$ 6,60", dest: "Base de todas as 11 salgadas" },
+          { id: "s10", name: "Azeitonas pretas fatiadas", qty: "1 sachê (100g–120g)", price: "R$ 5,00", dest: "Zero Lactose + Portuguesa" },
+          { id: "s11", name: "Ovos brancos", qty: "Meia dúzia (6 un)", price: "R$ 4,50", dest: "Portuguesa (cozinhar 2 a 3 ovos)" },
+          { id: "s12", name: "Ervilha em conserva", qty: "1 lata", price: "R$ 3,00", dest: "Portuguesa Família" }
         ]
       },
       {
-        aisle: "Doces & Confeitaria",
-        icon: "🍬",
+        aisle: "Hortifruti Fresco",
+        icon: "🥦",
+        aisleTotal: "R$ 33,00",
         items: [
-          { id: "s26", name: "Doce de Leite cremoso firme", qty: "1 pote (400g)", dest: "Banana Nevada" },
-          { id: "s27", name: "Chocolate ao Leite ou Nutella", qty: "250g a 300g", dest: "Sensação (ganache)" },
-          { id: "s28", name: "Chocolate Branco em barra", qty: "1 barra (90g)", dest: "Banana Nevada (ralar)" },
-          { id: "s29", name: "Canela em pó", qty: "1 frasco", dest: "Banana Nevada" }
+          { id: "s13", name: "Tomate Seco em conserva", qty: "1 pote pequeno (100g)", price: "R$ 9,50", dest: "Rúcula com Tomate Seco" },
+          { id: "s14", name: "Morangos frescos", qty: "1 bandeja (250g)", price: "R$ 8,00", dest: "Sensação (fatiar na hora)" },
+          { id: "s15", name: "Rúcula fresca", qty: "1 maço viçoso", price: "R$ 3,50", dest: "Rúcula com Tomate Seco" },
+          { id: "s16", name: "Manjericão fresco", qty: "1 maço", price: "R$ 3,50", dest: "Margherita (folhas pós-forno)" },
+          { id: "s17", name: "Tomates maduros", qty: "3 unidades", price: "R$ 3,00", dest: "Margherita (rodelas)" },
+          { id: "s18", name: "Cebolas médias", qty: "3 a 4 unidades", price: "R$ 2,50", dest: "3 Calabresas + Portuguesa" },
+          { id: "s19", name: "Bananas nanicas maduras", qty: "4 unidades", price: "R$ 3,00", dest: "Banana Nevada" }
+        ]
+      },
+      {
+        aisle: "Doces & Coberturas",
+        icon: "🍬",
+        aisleTotal: "R$ 23,00",
+        items: [
+          { id: "s20", name: "Doce de Leite firme", qty: "1 pote (400g)", price: "R$ 8,50", dest: "Banana Nevada" },
+          { id: "s21", name: "Barra Chocolate Meio Amargo/Leite", qty: "1 barra grande (160–180g)", price: "R$ 9,50", dest: "Sensação (derreter em ganache)" },
+          { id: "s22", name: "Barra Chocolate Branco", qty: "1 barra (80g–90g)", price: "R$ 5,00", dest: "Banana Nevada (ralar e gratinar)" }
         ]
       },
       {
         aisle: "Bebidas & Gelo",
         icon: "🥤",
+        aisleTotal: "R$ 45,00",
         items: [
-          { id: "s30", name: "Coca-Cola Tradicional (2 Litros)", qty: "2 garrafas (4L)", dest: "Bebida adolescentes" },
-          { id: "s31", name: "Guaraná Antarctica (2 Litros)", qty: "2 garrafas (4L)", dest: "Bebida adolescentes" },
-          { id: "s32", name: "Coca-Cola Zero Açúcar (2 Litros)", qty: "1 garrafa (2L)", dest: "Opção Zero Açúcar" },
-          { id: "s33", name: "Água Mineral 500ml", qty: "1 fardo (12 un)", dest: "Hidratação essencial" },
-          { id: "s34", name: "Gelo Filtrado", qty: "1 a 2 sacos (5kg)", dest: "Manter bebidas geladas" }
+          { id: "s23", name: "Refrigerantes 2 Litros (2 Coca + 2 Guaraná)", qty: "4 garrafas (8 Litros)", price: "R$ 35,00", dest: "Bebida adolescentes (+ jarra água c/ limão)" },
+          { id: "s24", name: "Gelo Filtrado", qty: "1 saco de 5 kg", price: "R$ 10,00", dest: "Garantir bebidas bem geladas" }
         ]
       },
       {
         aisle: "Descartáveis & Apoio",
         icon: "🍴",
+        aisleTotal: "R$ 16,00",
         items: [
-          { id: "s35", name: "Guardanapos de papel", qty: "2 pacotes", dest: "Uso dos convidados" },
-          { id: "s36", name: "Copos descartáveis 300–400ml", qty: "1 pacote (50 un)", dest: "Bebidas" },
-          { id: "s37", name: "Papel alumínio ou manteiga", qty: "1 rolo", dest: "Amigo Zero Lactose" },
-          { id: "s38", name: "Cortador de pizza (carretilha)", qty: "1 un", dest: "Fatiar" }
+          { id: "s25", name: "Copos descartáveis 300ml", qty: "1 pacote (50 un)", price: "R$ 6,50", dest: "Bebidas dos convidados" },
+          { id: "s26", name: "Guardanapos de papel", qty: "1 pacote folha dupla", price: "R$ 4,50", dest: "Apoio das pizzas" },
+          { id: "s27", name: "Papel alumínio econômico", qty: "1 rolo pequeno", price: "R$ 5,00", dest: "Isolar a pizza Zero Lactose na grade" }
         ]
       }
     ];
 
     /* ==========================================================================
-       STATE MANAGEMENT (LOCALSTORAGE PERSISTENCE)
+       INDEPENDENT TIMERS & PERSISTENCE ENGINE (DATE.NOW BASED)
        ========================================================================== */
-    const STORAGE_KEY_STATUS = 'bia_pizza_status_v1';
-    const STORAGE_KEY_SHOPPING = 'bia_pizza_shopping_v1';
+    const STORAGE_KEY_STATUS = 'bia_pizza_status_v2';
+    const STORAGE_KEY_TIMERS = 'bia_pizza_timers_v2';
+    const STORAGE_KEY_SHOPPING = 'bia_pizza_shopping_v2';
 
     let pizzaStatusMap = {};
+    let pizzaTimersMap = {}; // { [pizzaId]: { startedAt, totalSeconds, elapsedPaused, pausedAt, status, gratinarFired } }
     let shoppingCheckedMap = {};
 
     function loadState() {
       try {
         const savedStatus = localStorage.getItem(STORAGE_KEY_STATUS);
         if (savedStatus) pizzaStatusMap = JSON.parse(savedStatus);
-        
+
+        const savedTimers = localStorage.getItem(STORAGE_KEY_TIMERS);
+        if (savedTimers) pizzaTimersMap = JSON.parse(savedTimers);
+
         const savedShopping = localStorage.getItem(STORAGE_KEY_SHOPPING);
         if (savedShopping) shoppingCheckedMap = JSON.parse(savedShopping);
       } catch (e) {
-        console.error("Erro ao carregar localStorage:", e);
+        console.error("Erro ao ler localStorage:", e);
       }
     }
 
     function savePizzaStatus() {
       localStorage.setItem(STORAGE_KEY_STATUS, JSON.stringify(pizzaStatusMap));
       updateKPICounters();
+    }
+
+    function saveTimers() {
+      localStorage.setItem(STORAGE_KEY_TIMERS, JSON.stringify(pizzaTimersMap));
     }
 
     function saveShoppingState() {
@@ -1887,27 +1951,231 @@
       return pizzaStatusMap[id] || 'todo'; // 'todo', 'oven', 'done'
     }
 
-    function setPizzaStatus(id, status) {
-      pizzaStatusMap[id] = status;
+    /* Timer Methods */
+    function startPizzaTimer(pizzaId, durationSeconds = 480) {
+      getAudioContext();
+      pizzaStatusMap[pizzaId] = 'oven';
+      savePizzaStatus();
+
+      pizzaTimersMap[pizzaId] = {
+        pizzaId: pizzaId,
+        totalSeconds: durationSeconds,
+        startedAt: Date.now(),
+        elapsedPaused: 0,
+        pausedAt: null,
+        status: 'running',
+        gratinarFired: false
+      };
+      saveTimers();
+
+      const p = PIZZAS_DATA.find(x => x.id === pizzaId);
+      showToast("🔥 " + (p ? p.shortName : "Pizza #" + pizzaId) + " colocada no forno!");
+      playChime('click');
+
+      renderKDSCards();
+      renderOvenSlots();
+    }
+
+    function togglePausePizzaTimer(pizzaId) {
+      const timer = pizzaTimersMap[pizzaId];
+      if (!timer) return;
+
+      if (timer.status === 'running') {
+        timer.status = 'paused';
+        timer.pausedAt = Date.now();
+      } else if (timer.status === 'paused') {
+        const pausedDuration = Math.floor((Date.now() - timer.pausedAt) / 1000);
+        timer.elapsedPaused = (timer.elapsedPaused || 0) + pausedDuration;
+        timer.pausedAt = null;
+        timer.status = 'running';
+      }
+      saveTimers();
+      renderKDSCards();
+      renderOvenSlots();
+    }
+
+    function addTimeToPizzaTimer(pizzaId, extraSeconds = 60) {
+      const timer = pizzaTimersMap[pizzaId];
+      if (!timer) return;
+      timer.totalSeconds += extraSeconds;
+      saveTimers();
+      showToast("+1 minuto adicionado à fornada!");
+      renderKDSCards();
+      renderOvenSlots();
+    }
+
+    function finishPizzaTimer(pizzaId) {
+      pizzaStatusMap[pizzaId] = 'done';
+      savePizzaStatus();
+
+      if (pizzaTimersMap[pizzaId]) {
+        delete pizzaTimersMap[pizzaId];
+        saveTimers();
+      }
+
+      const p = PIZZAS_DATA.find(x => x.id === pizzaId);
+      showToast("🎉 " + (p ? p.shortName : "Pizza #" + pizzaId) + " assada e pronta para servir!");
+      playChime('done');
+
+      renderKDSCards();
+      renderOvenSlots();
+    }
+
+    function setPizzaStatusManual(pizzaId, status) {
+      if (status === 'oven') {
+        startPizzaTimer(pizzaId);
+        return;
+      }
+
+      pizzaStatusMap[pizzaId] = status;
+      if (status === 'done' || status === 'todo') {
+        if (pizzaTimersMap[pizzaId]) {
+          delete pizzaTimersMap[pizzaId];
+          saveTimers();
+        }
+      }
       savePizzaStatus();
       renderKDSCards();
-      
-      const p = PIZZAS_DATA.find(x => x.id === id);
-      if (status === 'oven') {
-        showToast("🔥 " + p.shortName + " enviada para o FORNO!");
-        document.getElementById('timer-select-pizza').value = id;
-      } else if (status === 'done') {
-        showToast("✅ " + p.shortName + " SERVIDA com sucesso!");
-        playChime('done');
+      renderOvenSlots();
+    }
+
+    /* Ticker Engine */
+    function timerTick() {
+      const now = Date.now();
+      let hasRunning = false;
+
+      Object.keys(pizzaTimersMap).forEach(key => {
+        const timer = pizzaTimersMap[key];
+        if (!timer) return;
+
+        let elapsed = 0;
+        if (timer.status === 'running') {
+          hasRunning = true;
+          elapsed = Math.floor((now - timer.startedAt) / 1000) - (timer.elapsedPaused || 0);
+        } else if (timer.status === 'paused') {
+          elapsed = Math.floor((timer.pausedAt - timer.startedAt) / 1000) - (timer.elapsedPaused || 0);
+        }
+
+        const remaining = Math.max(0, timer.totalSeconds - elapsed);
+
+        // Check Gratinar at 5 minutes elapsed (300s)
+        if (elapsed >= 300 && !timer.gratinarFired && remaining > 0) {
+          timer.gratinarFired = true;
+          saveTimers();
+          const p = PIZZAS_DATA.find(x => x.id === timer.pizzaId);
+          showToast("🔥 ATENÇÃO: Ligar Gratinador para " + (p ? p.shortName : "Pizza #" + timer.pizzaId) + "!");
+          playChime('gratinar');
+        }
+
+        // Check Complete
+        if (remaining <= 0 && timer.status !== 'completed_waiting') {
+          timer.status = 'completed_waiting';
+          saveTimers();
+          const p = PIZZAS_DATA.find(x => x.id === timer.pizzaId);
+          showToast("✅ PRONTA! Retirar " + (p ? p.shortName : "Pizza #" + timer.pizzaId) + " do forno!");
+          playChime('done');
+        }
+      });
+
+      // Update timer widgets in DOM
+      updateTimerWidgetsInDOM();
+    }
+
+    function updateTimerWidgetsInDOM() {
+      const now = Date.now();
+      let activeCount = 0;
+
+      Object.keys(pizzaTimersMap).forEach(key => {
+        const timer = pizzaTimersMap[key];
+        if (!timer) return;
+        activeCount++;
+
+        let elapsed = 0;
+        if (timer.status === 'running') {
+          elapsed = Math.floor((now - timer.startedAt) / 1000) - (timer.elapsedPaused || 0);
+        } else if (timer.status === 'paused') {
+          elapsed = Math.floor((timer.pausedAt - timer.startedAt) / 1000) - (timer.elapsedPaused || 0);
+        }
+
+        const remaining = Math.max(0, timer.totalSeconds - elapsed);
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        const pct = Math.min(100, Math.round(((timer.totalSeconds - remaining) / timer.totalSeconds) * 100));
+        const isGratinar = elapsed >= 300 && remaining > 0;
+
+        // Update Card widget if present in DOM
+        const cardDigits = document.getElementById(`card-timer-digits-${timer.pizzaId}`);
+        if (cardDigits) {
+          cardDigits.textContent = timeStr;
+          const bar = document.getElementById(`card-timer-bar-${timer.pizzaId}`);
+          if (bar) {
+            bar.style.width = pct + '%';
+            bar.classList.toggle('gratinar', isGratinar);
+          }
+          const pill = document.getElementById(`card-timer-pill-${timer.pizzaId}`);
+          if (pill) {
+            if (timer.status === 'paused') {
+              pill.textContent = "Pausado";
+              pill.className = "card-timer-state-pill";
+            } else if (isGratinar) {
+              pill.textContent = "🔥 GRATINAR";
+              pill.className = "card-timer-state-pill gratinar";
+            } else if (remaining === 0) {
+              pill.textContent = "✅ PRONTA!";
+              pill.className = "card-timer-state-pill gratinar";
+            } else {
+              pill.textContent = "Assando";
+              pill.className = "card-timer-state-pill";
+            }
+          }
+        }
+
+        // Update Oven Slot if present in DOM
+        const slotDigits = document.getElementById(`slot-timer-digits-${timer.pizzaId}`);
+        if (slotDigits) {
+          slotDigits.textContent = timeStr;
+          const slotFill = document.getElementById(`slot-progress-fill-${timer.pizzaId}`);
+          if (slotFill) {
+            slotFill.style.width = pct + '%';
+            slotFill.classList.toggle('gratinar', isGratinar);
+          }
+          const slotPill = document.getElementById(`slot-pill-${timer.pizzaId}`);
+          if (slotPill) {
+            if (timer.status === 'paused') {
+              slotPill.textContent = "Pausado";
+              slotPill.className = "slot-status-pill paused";
+            } else if (isGratinar) {
+              slotPill.textContent = "🔥 HORA DO GRATINADOR";
+              slotPill.className = "slot-status-pill gratinar";
+            } else if (remaining === 0) {
+              slotPill.textContent = "✅ PRONTA P/ SERVIR";
+              slotPill.className = "slot-status-pill gratinar";
+            } else {
+              slotPill.textContent = "Assando Base (250°C)";
+              slotPill.className = "slot-status-pill baking";
+            }
+          }
+          const alertBox = document.getElementById(`slot-alert-${timer.pizzaId}`);
+          if (alertBox) {
+            alertBox.classList.toggle('active', isGratinar);
+          }
+        }
+      });
+
+      // Update Oven nav badge
+      const ovenBadge = document.getElementById('nav-oven-badge');
+      if (ovenBadge) {
+        if (activeCount > 0) {
+          ovenBadge.style.display = 'block';
+          ovenBadge.textContent = activeCount;
+        } else {
+          ovenBadge.style.display = 'none';
+        }
       }
     }
 
-    function sendDirectToOven(id) {
-      setPizzaStatus(id, 'oven');
-      document.getElementById('timer-select-pizza').value = id;
-      switchTab('timer');
-      startTimerForPizza(id);
-    }
+    setInterval(timerTick, 1000);
 
     /* ==========================================================================
        AUDIO SYNTHESIZER (WEB AUDIO API)
@@ -1956,9 +2224,21 @@
             osc.stop(now + 1.2);
           });
           if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
+        } else if (type === 'click') {
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.05);
         }
       } catch (e) {
-        console.log("Audio API não pôde tocar:", e);
+        console.log("Audio API silenciosa:", e);
       }
     }
 
@@ -1987,11 +2267,16 @@
         const btn = document.querySelector(`.nav-btn[onclick*="${tabId}"]`);
         if (btn) btn.classList.add('active');
       }
+
+      if (tabId === 'timer') {
+        renderOvenSlots();
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     /* ==========================================================================
-       KDS RENDER & FILTERS
+       KDS / PIZZAS RENDERING
        ========================================================================== */
     let currentFilter = 'all';
 
@@ -2046,7 +2331,7 @@
           pokaBanner = `
             <div class="poka-yoke-banner">
               <span>⚠️</span>
-              <span>POKA-YOKE: Zero queijo! Assar em forma limpa.</span>
+              <span>ATENÇÃO: Zero queijo! Assar em folha de alumínio limpa.</span>
             </div>
           `;
         }
@@ -2057,6 +2342,35 @@
             <div class="cold-topping-banner">
               <span>🌿</span>
               <span>${pizza.coldTopping}</span>
+            </div>
+          `;
+        }
+
+        // Live timer widget if pizza is baking in oven
+        let liveTimerWidget = '';
+        if (status === 'oven') {
+          const timer = pizzaTimersMap[pizza.id];
+          const isPaused = timer && timer.status === 'paused';
+          liveTimerWidget = `
+            <div class="card-timer-widget" id="card-timer-wrap-${pizza.id}">
+              <div class="card-timer-header">
+                <span class="card-timer-digits" id="card-timer-digits-${pizza.id}">08:00</span>
+                <span class="card-timer-state-pill" id="card-timer-pill-${pizza.id}">Assando</span>
+              </div>
+              <div class="card-timer-progress-track">
+                <div class="card-timer-progress-bar" id="card-timer-bar-${pizza.id}" style="width: 0%;"></div>
+              </div>
+              <div class="card-timer-actions">
+                <button class="btn-timer-sub" onclick="togglePausePizzaTimer(${pizza.id})">
+                  ${isPaused ? '▶️ Retomar' : '⏸️ Pausar'}
+                </button>
+                <button class="btn-timer-sub" onclick="addTimeToPizzaTimer(${pizza.id}, 60)">
+                  +1 min
+                </button>
+                <button class="btn-timer-sub finish" onclick="finishPizzaTimer(${pizza.id})">
+                  ✅ Servida
+                </button>
+              </div>
             </div>
           `;
         }
@@ -2087,24 +2401,26 @@
               </div>
             </div>
 
-            <!-- Direct oven action button -->
-            ${status !== 'done' ? `
-              <button class="btn-direct-oven" onclick="sendDirectToOven(${pizza.id})">
-                <span>🔥 Colocar no Forno (Timer)</span>
+            <!-- Live in-card timer or start button -->
+            ${liveTimerWidget}
+
+            ${status === 'todo' ? `
+              <button class="btn-direct-oven" onclick="startPizzaTimer(${pizza.id})">
+                <span>🔥 Colocar no Forno (Timer 8 min)</span>
               </button>
             ` : ''}
 
             <!-- Status Buttons Bar -->
             <div class="status-action-row">
-              <button class="btn-status ${status === 'todo' ? 'active-todo' : ''}" onclick="setPizzaStatus(${pizza.id}, 'todo')">
+              <button class="btn-status ${status === 'todo' ? 'active-todo' : ''}" onclick="setPizzaStatusManual(${pizza.id}, 'todo')">
                 <span>📋</span>
                 <span>Na Fila</span>
               </button>
-              <button class="btn-status ${status === 'oven' ? 'active-oven' : ''}" onclick="setPizzaStatus(${pizza.id}, 'oven')">
+              <button class="btn-status ${status === 'oven' ? 'active-oven' : ''}" onclick="setPizzaStatusManual(${pizza.id}, 'oven')">
                 <span>🔥</span>
                 <span>No Forno</span>
               </button>
-              <button class="btn-status ${status === 'done' ? 'active-done' : ''}" onclick="setPizzaStatus(${pizza.id}, 'done')">
+              <button class="btn-status ${status === 'done' ? 'active-done' : ''}" onclick="setPizzaStatusManual(${pizza.id}, 'done')">
                 <span>✅</span>
                 <span>Servida</span>
               </button>
@@ -2112,6 +2428,82 @@
           </div>
         `;
         container.appendChild(card);
+      });
+    }
+
+    /* ==========================================================================
+       FORNO / MULTI-SLOT ACTIVE TIMERS VIEW
+       ========================================================================== */
+    function renderOvenSlots() {
+      const container = document.getElementById('oven-active-slots');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const activePizzaIds = Object.keys(pizzaTimersMap).map(Number);
+
+      if (activePizzaIds.length === 0) {
+        container.innerHTML = `
+          <div class="empty-oven-state" style="grid-column: 1/-1;">
+            <div class="empty-oven-icon">🍕🔥</div>
+            <h4 class="empty-oven-title">Nenhuma pizza no forno no momento</h4>
+            <p class="empty-oven-desc">Vá até a aba <strong>"Pizzas"</strong> e clique em <em>"Colocar no Forno"</em> para iniciar cronômetros independentes para cada assadeira!</p>
+            <button class="btn-timer-primary" style="max-width: 260px;" onclick="switchTab('kds')">
+              Ver Fila de Pizzas
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      activePizzaIds.forEach(id => {
+        const pizza = PIZZAS_DATA.find(p => p.id === id);
+        if (!pizza) return;
+        const timer = pizzaTimersMap[id];
+        const isPaused = timer && timer.status === 'paused';
+
+        const slot = document.createElement('div');
+        slot.className = 'slot-card';
+        slot.id = `oven-slot-${id}`;
+
+        slot.innerHTML = `
+          <div class="slot-card-top">
+            <img src="${pizza.image}" alt="${pizza.name}" class="slot-pizza-thumb">
+            <div class="slot-pizza-info">
+              <h4 class="slot-pizza-name">#${pizza.id} - ${pizza.shortName}</h4>
+              <span class="slot-status-pill baking" id="slot-pill-${id}">Assando (250°C)</span>
+            </div>
+          </div>
+
+          <div id="slot-alert-${id}" class="slot-alert-box">
+            <span style="font-size: 20px;">🔥</span>
+            <div>
+              <strong>LIGAR O GRATINADOR AGORA!</strong>
+              <div style="font-size: 0.76rem;">Acione a resistência superior para dourar as bolhas de queijo!</div>
+            </div>
+          </div>
+
+          <div class="slot-timer-display">
+            <div class="slot-timer-digits" id="slot-timer-digits-${id}">08:00</div>
+            <div class="slot-timer-target">Ciclo: ${Math.round(timer.totalSeconds / 60)} min</div>
+          </div>
+
+          <div class="slot-progress-track">
+            <div class="slot-progress-fill" id="slot-progress-fill-${id}" style="width: 0%;"></div>
+          </div>
+
+          <div class="slot-actions-row">
+            <button class="btn-slot-action" onclick="togglePausePizzaTimer(${id})">
+              ${isPaused ? '▶️ Retomar' : '⏸️ Pausar'}
+            </button>
+            <button class="btn-slot-action" onclick="addTimeToPizzaTimer(${id}, 60)">
+              +1 min
+            </button>
+            <button class="btn-slot-action finish" onclick="finishPizzaTimer(${id})">
+              ✅ Tirar e Servir
+            </button>
+          </div>
+        `;
+        container.appendChild(slot);
       });
     }
 
@@ -2163,8 +2555,8 @@
         </ol>
 
         <div style="margin-top: 20px;">
-          <button class="btn-direct-oven" style="width: 100%;" onclick="closeRecipeModal(); sendDirectToOven(${pizza.id});">
-            🔥 Colocar no Forno (Timer)
+          <button class="btn-direct-oven" style="width: 100%;" onclick="closeRecipeModal(); startPizzaTimer(${pizza.id});">
+            🔥 Colocar no Forno (Iniciar Timer de 8 min)
           </button>
         </div>
       `;
@@ -2183,145 +2575,7 @@
     }
 
     /* ==========================================================================
-       TIMER ENGINE
-       ========================================================================== */
-    let timerTotalSeconds = 480; // 8 minutes default
-    let timerRemainingSeconds = 480;
-    let timerInterval = null;
-    let isTimerRunning = false;
-    let gratinarTriggered = false;
-
-    function populateTimerSelector() {
-      const select = document.getElementById('timer-select-pizza');
-      select.innerHTML = '<option value="0">Modo Livre (Qualquer Pizza)</option>';
-      PIZZAS_DATA.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.textContent = `#${p.id} - ${p.name}`;
-        select.appendChild(opt);
-      });
-    }
-
-    function onTimerSelectPizzaChange() {
-      // Handler when user selects pizza
-    }
-
-    function setTimerDuration(seconds) {
-      timerTotalSeconds = seconds;
-      timerRemainingSeconds = seconds;
-      gratinarTriggered = false;
-      document.getElementById('gratinar-alert').classList.remove('active');
-      document.getElementById('timer-progress').classList.remove('gratinar-mode');
-      
-      document.querySelectorAll('.preset-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('onclick').includes(seconds));
-      });
-
-      updateTimerDisplay();
-    }
-
-    function startTimerForPizza(id) {
-      document.getElementById('timer-select-pizza').value = id;
-      setTimerDuration(480);
-      if (!isTimerRunning) {
-        toggleTimer();
-      }
-    }
-
-    function toggleTimer() {
-      getAudioContext();
-      const btn = document.getElementById('btn-timer-toggle');
-      const btnText = document.getElementById('btn-timer-text');
-
-      if (isTimerRunning) {
-        clearInterval(timerInterval);
-        isTimerRunning = false;
-        btn.classList.add('btn-pause');
-        btnText.textContent = "Continuar Forneamento";
-        document.getElementById('timer-phase').textContent = "Pausado";
-      } else {
-        isTimerRunning = true;
-        btn.classList.remove('btn-pause');
-        btnText.textContent = "Pausar";
-        
-        timerInterval = setInterval(() => {
-          if (timerRemainingSeconds > 0) {
-            timerRemainingSeconds--;
-            
-            const elapsed = timerTotalSeconds - timerRemainingSeconds;
-            if (elapsed >= 300 && !gratinarTriggered) {
-              gratinarTriggered = true;
-              triggerGratinarAlert();
-            }
-
-            updateTimerDisplay();
-          } else {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            btnText.textContent = "Iniciar Forneamento";
-            onTimerComplete();
-          }
-        }, 1000);
-
-        updateTimerDisplay();
-      }
-    }
-
-    function resetTimer() {
-      clearInterval(timerInterval);
-      isTimerRunning = false;
-      timerRemainingSeconds = timerTotalSeconds;
-      gratinarTriggered = false;
-      
-      document.getElementById('btn-timer-toggle').classList.remove('btn-pause');
-      document.getElementById('btn-timer-text').textContent = "Iniciar Forneamento";
-      document.getElementById('gratinar-alert').classList.remove('active');
-      document.getElementById('timer-progress').classList.remove('gratinar-mode');
-      document.getElementById('timer-phase').textContent = "Aguardando";
-      
-      updateTimerDisplay();
-    }
-
-    function triggerGratinarAlert() {
-      document.getElementById('gratinar-alert').classList.add('active');
-      document.getElementById('timer-progress').classList.add('gratinar-mode');
-      document.getElementById('timer-phase').textContent = "🔥 GRATINAR (BROIL)";
-      playChime('gratinar');
-      showToast("🔥 ATENÇÃO: Ligar o Gratinador (Broil) agora!");
-    }
-
-    function onTimerComplete() {
-      document.getElementById('timer-phase').textContent = "✅ CONCLUÍDO!";
-      document.getElementById('gratinar-alert').classList.remove('active');
-      playChime('done');
-      
-      const selectedPizzaId = parseInt(document.getElementById('timer-select-pizza').value);
-      if (selectedPizzaId > 0) {
-        setPizzaStatus(selectedPizzaId, 'done');
-        showToast("🎉 Pizza #" + selectedPizzaId + " está pronta e foi marcada como Servida!");
-      } else {
-        showToast("🎉 Pizza assada com sucesso!");
-      }
-    }
-
-    function updateTimerDisplay() {
-      const mins = Math.floor(timerRemainingSeconds / 60);
-      const secs = timerRemainingSeconds % 60;
-      document.getElementById('timer-time').textContent = 
-        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-      const totalCircumference = 691.15;
-      const progressFraction = timerRemainingSeconds / timerTotalSeconds;
-      const offset = totalCircumference * (1 - progressFraction);
-      document.getElementById('timer-progress').style.strokeDashoffset = offset;
-
-      if (isTimerRunning && !gratinarTriggered) {
-        document.getElementById('timer-phase').textContent = "Cocção Base";
-      }
-    }
-
-    /* ==========================================================================
-       LISTA DE COMPRAS
+       LISTA DE COMPRAS ORÇADA (R$ 294,50 NO MERCADO)
        ========================================================================== */
     function renderShoppingList() {
       const container = document.getElementById('shopping-aisles-container');
@@ -2340,20 +2594,20 @@
               <span>${aisle.icon}</span>
               <span>${aisle.aisle}</span>
             </h3>
-            <span class="aisle-count" id="count-${aisle.aisle.replace(/[^a-zA-Z0-9]/g, '')}">${checkedItems}/${totalItems} comprados</span>
+            <span class="aisle-total-price">${aisle.aisleTotal}</span>
           </div>
           <ul class="shopping-items-list">
             ${aisle.items.map(item => {
               const isChecked = !!shoppingCheckedMap[item.id];
               return `
-                <li class="shopping-item ${isChecked ? 'checked' : ''}" onclick="toggleShoppingItem('${item.id}', this, '${aisle.aisle}')">
+                <li class="shopping-item ${isChecked ? 'checked' : ''}" onclick="toggleShoppingItem('${item.id}', this)">
                   <div class="shopping-checkbox">
                     <svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
                   <div class="shopping-details">
                     <div class="shopping-name">
-                      <span>${item.name}</span>
-                      <span class="shopping-qty">${item.qty}</span>
+                      <span>${item.name} (${item.qty})</span>
+                      <span class="shopping-price-tag">${item.price}</span>
                     </div>
                     <div class="shopping-dest">Destino: ${item.dest}</div>
                   </div>
@@ -2368,20 +2622,10 @@
       updateShoppingProgress();
     }
 
-    function toggleShoppingItem(id, liElement, aisleName) {
+    function toggleShoppingItem(id, liElement) {
       shoppingCheckedMap[id] = !shoppingCheckedMap[id];
       saveShoppingState();
-      
       liElement.classList.toggle('checked', shoppingCheckedMap[id]);
-      
-      const aisleObj = SHOPPING_DATA.find(a => a.aisle === aisleName);
-      if (aisleObj) {
-        const total = aisleObj.items.length;
-        const checked = aisleObj.items.filter(i => shoppingCheckedMap[i.id]).length;
-        const sanitized = aisleName.replace(/[^a-zA-Z0-9]/g, '');
-        const countBadge = document.getElementById('count-' + sanitized);
-        if (countBadge) countBadge.textContent = `${checked}/${total} comprados`;
-      }
     }
 
     function updateShoppingProgress() {
@@ -2427,12 +2671,12 @@
         {
           name: "Calabresa Zero Lactose (Marinara)",
           image: "assets/images/calabresa_zero_lactose.jpg",
-          desc: "Especialmente preparada SEM NENHUM QUEIJO. Molho de tomate rústico com alho e azeite extravirgem, muita calabresa e azeitonas pretas.",
+          desc: "Especialmente preparada SEM NENHUM QUEIJO em folha de alumínio dedicada. Molho de tomate rústico, calabresa farta e azeitonas pretas.",
           badge: "🚫 100% Sem Lactose",
           type: "Especial"
         },
         {
-          name: "Frango com Catupiry",
+          name: "Frango com Requeijão Cremoso",
           image: "assets/images/frango_catupiry.jpg",
           desc: "Frango tenro desfiado temperado com páprica nobre e ervas, coberto com espirais generosas de requeijão cremoso tipo Catupiry.",
           badge: "❤️ Favorita",
@@ -2441,28 +2685,28 @@
         {
           name: "Rúcula com Tomate Seco",
           image: "assets/images/rucula_tomate_seco.jpg",
-          desc: "Mussarela dourada crocante, coberta após sair do forno com folhas frescas e viçosas de rúcula, tomate seco artesanal e azeite.",
+          desc: "Mussarela dourada crocante, coberta após sair do forno com folhas frescas e viçosas de rúcula, tomate seco nobre e azeite extravirgem.",
           badge: "🌿 Frescor Gourmet",
           type: "Salgada"
         },
         {
           name: "Bacon Supreme & Cheddar",
           image: "assets/images/bacon_supreme.jpg",
-          desc: "Bacon crocante em cubinhos tostados, fios aveludados de cheddar cremoso, mussarela derretida e cebolinha verde fresca.",
+          desc: "Bacon crocante em cubinhos tostados, fios aveludados de cheddar cremoso e mussarela derretida.",
           badge: "🥓 Hit dos Jovens",
           type: "Salgada"
         },
         {
           name: "Quatro Queijos Selecionados",
           image: "assets/images/quatro_queijos.jpg",
-          desc: "Harmonia cremosa entre mussarela derretida, provolone defumado, requeijão culinário e toques sofisticados de gorgonzola.",
-          badge: "🧀 Sabor Intenso",
+          desc: "Harmonia cremosa entre mussarela ralada derretida, requeijão culinário, cheddar aveludado e parmesão ralado.",
+          badge: "🧀 Sabor Cremoso",
           type: "Salgada"
         },
         {
           name: "Margherita Tradicional",
           image: "assets/images/margherita.jpg",
-          desc: "Mussarela derretida, rodelas de tomate fresco, queijo parmesão ralado e folhas perfumadas de manjericão fresco aplicadas na saída do forno.",
+          desc: "Mussarela derretida, rodelas de tomate fresco, queijo parmesão e folhas perfumadas de manjericão fresco aplicadas logo na saída do forno.",
           badge: "🇮🇹 Clássica Italiana",
           type: "Salgada"
         },
@@ -2476,8 +2720,8 @@
         {
           name: "Sensação com Morangos",
           image: "assets/images/sensacao_morango.jpg",
-          desc: "Ganache nobre de chocolate ao leite brilhante, decorada na saída do forno com morangos frescos fatiados a frio e raspas de chocolate.",
-          badge: "🍓 Sobremesa dos Deuses",
+          desc: "Ganache nobre de chocolate ao leite brilhante, decorada na saída do forno com morangos frescos fatiados a frio.",
+          badge: "🍓 Doce dos Deuses",
           type: "Doce"
         },
         {
@@ -2516,8 +2760,7 @@
       loadState();
       renderKDSCards();
       updateKPICounters();
-      populateTimerSelector();
-      updateTimerDisplay();
+      renderOvenSlots();
       renderShoppingList();
       renderGuestMenu();
     });
